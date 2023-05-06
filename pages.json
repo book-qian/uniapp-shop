@@ -17,6 +17,29 @@
       "style": {}
     }
   ],
+  "subPackages": [
+	{
+		"root": "subpkg",
+		"pages": [
+			{
+				"path" : "goods_detail/goods_detail",
+				"style" :  {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}                                                                                  
+			}
+		    ,{
+                    "path" : "goods_list/goods_list",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
+	}
+  ],
   "globalStyle": {
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "yyq优购",
@@ -51,5 +74,15 @@
 	  	"selectedIconPath": "static/tab_icons/my-active.png"
 	  }
     ]
-  }
+  },
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "", //模式名称
+				"path": "", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	}
 }

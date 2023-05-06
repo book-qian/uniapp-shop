@@ -6,6 +6,8 @@ if (!Math) {
   "./pages/cate/cate.js";
   "./pages/cart/cart.js";
   "./pages/my/my.js";
+  "./subpkg/goods_detail/goods_detail.js";
+  "./subpkg/goods_list/goods_list.js";
 }
 const _sfc_main = {
   onLaunch: function() {
@@ -25,5 +27,22 @@ function createApp() {
     app
   };
 }
+common_vendor.index.$http = common_vendor.$http;
+common_vendor.$http.baseUrl = "https://www.uinav.com";
+common_vendor.$http.beforeRequest = function(options) {
+  common_vendor.index.showLoading({
+    title: "数据加载中..."
+  });
+};
+common_vendor.$http.afterRequest = function() {
+  common_vendor.index.hideLoading();
+};
+common_vendor.index.$showMessage = function(title = "网络请求失败", duration = 1500) {
+  common_vendor.index.showToast({
+    title,
+    duration,
+    icon: "none"
+  });
+};
 createApp().app.mount("#app");
 exports.createApp = createApp;
