@@ -28,7 +28,7 @@ function createApp() {
   };
 }
 common_vendor.index.$http = common_vendor.$http;
-common_vendor.$http.baseUrl = "https://www.uinav.com";
+common_vendor.$http.baseUrl = "https://api-hmugo-web.itheima.net";
 common_vendor.$http.beforeRequest = function(options) {
   common_vendor.index.showLoading({
     title: "数据加载中..."
