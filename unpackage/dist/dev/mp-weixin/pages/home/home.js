@@ -1,5 +1,13 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+if (!Array) {
+  const _easycom_my_search2 = common_vendor.resolveComponent("my-search");
+  _easycom_my_search2();
+}
+const _easycom_my_search = () => "../../components/my-search/my-search.js";
+if (!Math) {
+  _easycom_my_search();
+}
 const _sfc_main = {
   __name: "home",
   setup(__props) {
@@ -41,6 +49,12 @@ const _sfc_main = {
       floorList.value = message;
       console.log("floor", floorList.value);
     };
+    const gotoSearch = () => {
+      console.log(123);
+      common_vendor.index.navigateTo({
+        url: "/subpkg/search/search"
+      });
+    };
     common_vendor.onLoad(() => {
       getSwiperData();
       getNavListData();
@@ -48,21 +62,22 @@ const _sfc_main = {
     });
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.f(swiperList.value, (item, i, i0) => {
+        a: common_vendor.o(gotoSearch),
+        b: common_vendor.f(swiperList.value, (item, i, i0) => {
           return {
             a: item.image_src,
             b: `/subpkg/goods_detail/goods_detail?goods_id=${item.goods_id}`,
             c: i
           };
         }),
-        b: common_vendor.f(navList.value, (item, i, i0) => {
+        c: common_vendor.f(navList.value, (item, i, i0) => {
           return {
             a: item.image_src,
             b: i,
             c: common_vendor.o(($event) => navClickHander(item), i)
           };
         }),
-        c: common_vendor.f(floorList.value, (item, i, i0) => {
+        d: common_vendor.f(floorList.value, (item, i, i0) => {
           return {
             a: item.floor_title.image_src,
             b: item.product_list[0].image_src,
