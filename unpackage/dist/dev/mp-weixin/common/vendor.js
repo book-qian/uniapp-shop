@@ -7125,6 +7125,7 @@ const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
 const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
 exports.$http = $http;
 exports._export_sfc = _export_sfc;
+exports.computed = computed;
 exports.createSSRApp = createSSRApp;
 exports.e = e;
 exports.f = f;
@@ -7138,3 +7139,4 @@ exports.ref = ref;
 exports.resolveComponent = resolveComponent;
 exports.s = s;
 exports.t = t;
+exports.unref = unref;

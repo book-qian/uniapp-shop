@@ -35,7 +35,7 @@ const _sfc_main = {
     },
     gotoGoodsList({ cat_id }) {
       common_vendor.index.navigateTo({
-        url: "/subpkg/goods_list/goods_list?c_id=" + cat_id
+        url: "/subpkg/goods_list/goods_list?cid=" + cat_id
       });
     },
     gotoSearch() {

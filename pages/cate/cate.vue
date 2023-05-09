@@ -61,7 +61,7 @@ export default {
 		},
 		gotoGoodsList({ cat_id }) {
 			uni.navigateTo({
-				url: '/subpkg/goods_list/goods_list?c_id=' + cat_id
+				url: '/subpkg/goods_list/goods_list?cid=' + cat_id
 			});
 		},
 		gotoSearch() {
