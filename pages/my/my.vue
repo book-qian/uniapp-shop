@@ -1,19 +1,15 @@
 <template>
-	<view>
-		my
-	</view>
+	<view>my</view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				
-			};
-		}
+import badgeMix from '@/minxins/tabbar-badge.js';
+export default {
+	mixins: [badgeMix],
+	data() {
+		return {};
 	}
+};
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

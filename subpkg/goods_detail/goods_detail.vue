@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 export default {
 	data() {
 		return {
@@ -42,7 +43,7 @@ export default {
 				{
 					icon: 'cart',
 					text: '购物车',
-					info: 2
+					info: 0
 				}
 			],
 			buttonGroup: [
@@ -63,7 +64,22 @@ export default {
 		let goods_id = option.goods_id;
 		this.getGoodsInfo(goods_id);
 	},
+	watch: {
+		total: {
+			handler(newVal) {
+				const findResult = this.options.find(t => t.text === '购物车');
+				if (findResult) {
+					findResult.info = newVal;
+				}
+			},
+			immediate: true
+		}
+	},
+	computed: {
+		...mapGetters('m_cart', ['total'])
+	},
 	methods: {
+		...mapMutations('m_cart', ['addToCart']),
 		// 左侧导航点击
 		onClick(e) {
 			if (e.content.text === '购物车') {
@@ -72,7 +88,22 @@ export default {
 				});
 			}
 		},
-		buttonClick() {},
+		// 右侧点击
+		buttonClick(e) {
+			if (e.content.text === '加入购物车') {
+				// 组织商品对象 goods_id goods_name goods_price goods_count goods_small_logo goods_state
+				const { goods_id, goods_name, goods_price, goods_small_logo } = this.goodsInfo;
+				let goods = {
+					goods_id,
+					goods_name,
+					goods_price,
+					goods_small_logo,
+					goods_count: 1,
+					goods_state: true
+				};
+				this.addToCart(goods);
+			}
+		},
 		// 右侧导航点击
 		async getGoodsInfo(goods_id) {
 			const { data: res } = await uni.$http.get('/api/public/v1/goods/detail', { goods_id });
@@ -80,7 +111,6 @@ export default {
 			if (meta.status !== 200) return uni.$showMessage();
 			message.goods_introduce = message.goods_introduce.replace(/<img /g, '<img style="display:block;" ').replace(/webp,'jpg'/g);
 			this.goodsInfo = message;
-			console.log('goodinfo', this.goodsInfo);
 		},
 		preview(i) {
 			uni.previewImage({

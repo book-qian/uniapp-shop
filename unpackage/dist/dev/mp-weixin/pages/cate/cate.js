@@ -1,6 +1,8 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const minxins_tabbarBadge = require("../../minxins/tabbar-badge.js");
 const _sfc_main = {
+  mixins: [minxins_tabbarBadge.badgeMix],
   data() {
     return {
       wh: 0,

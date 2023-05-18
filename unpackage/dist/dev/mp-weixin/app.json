@@ -50,5 +50,16 @@
       }
     ]
   },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "获取收件地址"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "onLocationChange",
+    "startLocationUpdateBackground",
+    "chooseAddress"
+  ],
   "usingComponents": {}
 }

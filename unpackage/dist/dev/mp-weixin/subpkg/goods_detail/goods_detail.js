@@ -12,7 +12,7 @@ const _sfc_main = {
         {
           icon: "cart",
           text: "购物车",
-          info: 2
+          info: 0
         }
       ],
       buttonGroup: [
@@ -33,7 +33,22 @@ const _sfc_main = {
     let goods_id = option.goods_id;
     this.getGoodsInfo(goods_id);
   },
+  watch: {
+    total: {
+      handler(newVal) {
+        const findResult = this.options.find((t) => t.text === "购物车");
+        if (findResult) {
+          findResult.info = newVal;
+        }
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    ...common_vendor.mapGetters("m_cart", ["total"])
+  },
   methods: {
+    ...common_vendor.mapMutations("m_cart", ["addToCart"]),
     // 左侧导航点击
     onClick(e) {
       if (e.content.text === "购物车") {
@@ -42,7 +57,20 @@ const _sfc_main = {
         });
       }
     },
-    buttonClick() {
+    // 右侧点击
+    buttonClick(e) {
+      if (e.content.text === "加入购物车") {
+        const { goods_id, goods_name, goods_price, goods_small_logo } = this.goodsInfo;
+        let goods = {
+          goods_id,
+          goods_name,
+          goods_price,
+          goods_small_logo,
+          goods_count: 1,
+          goods_state: true
+        };
+        this.addToCart(goods);
+      }
     },
     // 右侧导航点击
     async getGoodsInfo(goods_id) {
@@ -52,7 +80,6 @@ const _sfc_main = {
         return common_vendor.index.$showMessage();
       message.goods_introduce = message.goods_introduce.replace(/<img /g, '<img style="display:block;" ').replace(/webp,'jpg'/g);
       this.goodsInfo = message;
-      console.log("goodinfo", this.goodsInfo);
     },
     preview(i) {
       common_vendor.index.previewImage({

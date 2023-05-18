@@ -6,6 +6,9 @@
   border-bottom: 1px solid #f0f0f0;
 }
 .goods-item .good-item-left {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-right: 10px;
 }
 .goods-item .good-item-left .goods-pic {
@@ -17,9 +20,15 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex: 1;
 }
 .goods-item .goods-item-right .goods-name {
   font-size: 13px;
+}
+.goods-item .goods-item-right .goods-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .goods-item .goods-item-right .goods-info .goods-price {
   font-size: 16px;
