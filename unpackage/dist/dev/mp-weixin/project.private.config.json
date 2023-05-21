@@ -4,7 +4,7 @@
   "setting": {
     "compileHotReLoad": false
   },
-  "libVersion": "2.30.4",
+  "libVersion": "2.31.1",
   "condition": {
     "miniprogram": {
       "list": [
@@ -39,6 +39,13 @@
         {
           "name": "",
           "pathName": "pages/cart/cart",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/my/my",
           "query": "",
           "launchMode": "default",
           "scene": null

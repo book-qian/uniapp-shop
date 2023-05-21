@@ -1,0 +1,1 @@
+<view class="login-container"><uni-icons wx:if="{{a}}" u-i="7acff242-0" bind:__l="__l" u-p="{{a}}"></uni-icons><button type="primary" class="btn-login" open-type="getUserInfo" bindgetuserinfo="{{b}}">一键登录</button><text class="tips-text">登录后尽享更多权益</text></view>

@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "my-login": "../../components/my-login/my-login",
+    "my-userinfo": "../../components/my-userinfo/my-userinfo"
+  }
 }
