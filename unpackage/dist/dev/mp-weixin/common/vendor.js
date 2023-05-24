@@ -1491,7 +1491,7 @@ function populateParameters(fromRes, toRes) {
   const hostLanguage = language.replace(/_/g, "-");
   const parameters = {
     appId: "__UNI__7694069",
-    appName: "uni-shop",
+    appName: "永乾优购",
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
@@ -1635,7 +1635,7 @@ const getAppBaseInfo = {
       hostSDKVersion: SDKVersion,
       hostTheme: theme,
       appId: "__UNI__7694069",
-      appName: "uni-shop",
+      appName: "永乾优购",
       appVersion: "1.0.0",
       appVersionCode: "100",
       appLanguage: getAppLanguage(hostLanguage)
@@ -3783,43 +3783,43 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     warn(`${apiName} is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup().`);
   }
 }
-const createHook = (lifecycle) => (hook, target = currentInstance) => (
+const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (
   // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
   (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
 );
-const onBeforeMount = createHook(
+const onBeforeMount = createHook$1(
   "bm"
   /* LifecycleHooks.BEFORE_MOUNT */
 );
-const onMounted = createHook(
+const onMounted = createHook$1(
   "m"
   /* LifecycleHooks.MOUNTED */
 );
-const onBeforeUpdate = createHook(
+const onBeforeUpdate = createHook$1(
   "bu"
   /* LifecycleHooks.BEFORE_UPDATE */
 );
-const onUpdated = createHook(
+const onUpdated = createHook$1(
   "u"
   /* LifecycleHooks.UPDATED */
 );
-const onBeforeUnmount = createHook(
+const onBeforeUnmount = createHook$1(
   "bum"
   /* LifecycleHooks.BEFORE_UNMOUNT */
 );
-const onUnmounted = createHook(
+const onUnmounted = createHook$1(
   "um"
   /* LifecycleHooks.UNMOUNTED */
 );
-const onServerPrefetch = createHook(
+const onServerPrefetch = createHook$1(
   "sp"
   /* LifecycleHooks.SERVER_PREFETCH */
 );
-const onRenderTriggered = createHook(
+const onRenderTriggered = createHook$1(
   "rtg"
   /* LifecycleHooks.RENDER_TRIGGERED */
 );
-const onRenderTracked = createHook(
+const onRenderTracked = createHook$1(
   "rtc"
   /* LifecycleHooks.RENDER_TRACKED */
 );
@@ -7067,6 +7067,11 @@ const createSubpackageApp = initCreateSubpackageApp();
  * @license MIT
  */
 var storeKey = "store";
+function useStore(key) {
+  if (key === void 0)
+    key = null;
+  return inject(key !== null ? key : storeKey);
+}
 function forEachValue(obj, fn) {
   Object.keys(obj).forEach(function(key) {
     return fn(obj[key], key);
@@ -7733,110 +7738,6 @@ Store.prototype._withCommit = function _withCommit(fn) {
   this._committing = committing;
 };
 Object.defineProperties(Store.prototype, prototypeAccessors);
-var mapState = normalizeNamespace(function(namespace, states) {
-  var res = {};
-  if (!isValidMap(states)) {
-    console.error("[vuex] mapState: mapper parameter must be either an Array or an Object");
-  }
-  normalizeMap(states).forEach(function(ref2) {
-    var key = ref2.key;
-    var val = ref2.val;
-    res[key] = function mappedState() {
-      var state = this.$store.state;
-      var getters = this.$store.getters;
-      if (namespace) {
-        var module2 = getModuleByNamespace(this.$store, "mapState", namespace);
-        if (!module2) {
-          return;
-        }
-        state = module2.context.state;
-        getters = module2.context.getters;
-      }
-      return typeof val === "function" ? val.call(this, state, getters) : state[val];
-    };
-    res[key].vuex = true;
-  });
-  return res;
-});
-var mapMutations = normalizeNamespace(function(namespace, mutations) {
-  var res = {};
-  if (!isValidMap(mutations)) {
-    console.error("[vuex] mapMutations: mapper parameter must be either an Array or an Object");
-  }
-  normalizeMap(mutations).forEach(function(ref2) {
-    var key = ref2.key;
-    var val = ref2.val;
-    res[key] = function mappedMutation() {
-      var args = [], len = arguments.length;
-      while (len--)
-        args[len] = arguments[len];
-      var commit2 = this.$store.commit;
-      if (namespace) {
-        var module2 = getModuleByNamespace(this.$store, "mapMutations", namespace);
-        if (!module2) {
-          return;
-        }
-        commit2 = module2.context.commit;
-      }
-      return typeof val === "function" ? val.apply(this, [commit2].concat(args)) : commit2.apply(this.$store, [val].concat(args));
-    };
-  });
-  return res;
-});
-var mapGetters = normalizeNamespace(function(namespace, getters) {
-  var res = {};
-  if (!isValidMap(getters)) {
-    console.error("[vuex] mapGetters: mapper parameter must be either an Array or an Object");
-  }
-  normalizeMap(getters).forEach(function(ref2) {
-    var key = ref2.key;
-    var val = ref2.val;
-    val = namespace + val;
-    res[key] = function mappedGetter() {
-      if (namespace && !getModuleByNamespace(this.$store, "mapGetters", namespace)) {
-        return;
-      }
-      if (!(val in this.$store.getters)) {
-        console.error("[vuex] unknown getter: " + val);
-        return;
-      }
-      return this.$store.getters[val];
-    };
-    res[key].vuex = true;
-  });
-  return res;
-});
-function normalizeMap(map) {
-  if (!isValidMap(map)) {
-    return [];
-  }
-  return Array.isArray(map) ? map.map(function(key) {
-    return { key, val: key };
-  }) : Object.keys(map).map(function(key) {
-    return { key, val: map[key] };
-  });
-}
-function isValidMap(map) {
-  return Array.isArray(map) || isObject(map);
-}
-function normalizeNamespace(fn) {
-  return function(namespace, map) {
-    if (typeof namespace !== "string") {
-      map = namespace;
-      namespace = "";
-    } else if (namespace.charAt(namespace.length - 1) !== "/") {
-      namespace += "/";
-    }
-    return fn(namespace, map);
-  };
-}
-function getModuleByNamespace(store, helper, namespace) {
-  var module2 = store._modulesNamespaceMap[namespace];
-  if (!module2) {
-    console.error("[vuex] module namespace not found in " + helper + "(): " + namespace);
-  }
-  return module2;
-}
 class Request {
   constructor(options = {}) {
     this.baseUrl = options.baseUrl || "";
@@ -7898,20 +7799,35 @@ class Request {
   }
 }
 const $http = new Request();
+const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
+  !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
+};
+const onShow = /* @__PURE__ */ createHook(ON_SHOW);
+const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
+const onReachBottom = /* @__PURE__ */ createHook(ON_REACH_BOTTOM);
+const onPullDownRefresh = /* @__PURE__ */ createHook(ON_PULL_DOWN_REFRESH);
 exports.$http = $http;
 exports._export_sfc = _export_sfc;
+exports.computed = computed;
 exports.createSSRApp = createSSRApp;
 exports.createStore = createStore;
 exports.e = e;
 exports.f = f;
 exports.index = index;
 exports.initVueI18n = initVueI18n;
-exports.mapGetters = mapGetters;
-exports.mapMutations = mapMutations;
-exports.mapState = mapState;
 exports.n = n;
 exports.o = o;
+exports.onLoad = onLoad;
+exports.onPullDownRefresh = onPullDownRefresh;
+exports.onReachBottom = onReachBottom;
+exports.onShow = onShow;
 exports.p = p;
+exports.reactive = reactive;
+exports.ref = ref;
 exports.resolveComponent = resolveComponent;
 exports.s = s;
 exports.t = t;
+exports.unref = unref;
+exports.useStore = useStore;
+exports.watch = watch;
+//# sourceMappingURL=vendor.js.map

@@ -6,54 +6,45 @@
 	</view>
 </template>
 
-<script>
-import { mapMutations, mapState } from 'vuex';
-export default {
-	name: 'my-login',
-	data() {
-		return {};
-	},
-	computed: {
-		...mapState('m_user', ['redirectInfo'])
-	},
-	methods: {
-		...mapMutations('m_user', ['updateUserinfo', 'updateToken', 'updateRedirectInfo']),
-		loginHandler(e) {
-			console.log(e);
-			this.updateUserinfo(e.detail.userInfo);
-			this.getToken(e.detail);
-		},
-		async getToken({ encryptedData, iv, rawData, signature }) {
-			const { errMsg, code } = await uni.login();
-			if (errMsg !== 'login:ok') return uni.$showMessage('登录失败');
+<script setup>
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+const TOKEN = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIzLCJpYXQiOjE1NjQ3MzAwNzksImV4cCI6MTAwMTU2NDczMDA3OH0.YPt-XeLnjV-_1ITaXGY2FhxmCe4NvXuRnRB8OMCfnPo';
+const store = useStore();
+const redirectInfo = computed(() => store.state['m_user'].redirectInfo);
 
-			const query = {
-				code,
-				encryptedData,
-				iv,
-				rawData,
-				signature
-			};
+const loginHandler = e => {
+	store.commit('m_user/updateUserinfo', e.detail.userInfo);
+	getToken(e.detail);
+};
+const getToken = async ({ encryptedData, iv, rawData, signature }) => {
+	const { errMsg, code } = await uni.login();
+	if (errMsg !== 'login:ok') return uni.$showMessage('登录失败');
 
-			const { data: loginResult } = await uni.$http.post('/api/public/v1/users/wxlogin', query);
-			const { meta, message } = loginResult;
-			if (meta.status == 200) return uni.$showMessage('登录失败');
-			uni.$showMessage('登录成功');
-			this.updateToken(
-				'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIzLCJpYXQiOjE1NjQ3MzAwNzksImV4cCI6MTAwMTU2NDczMDA3OH0.YPt-XeLnjV-_1ITaXGY2FhxmCe4NvXuRnRB8OMCfnPo'
-			);
+	const query = {
+		code,
+		encryptedData,
+		iv,
+		rawData,
+		signature
+	};
 
-			// 登录成功之后再跳转原来的页面
-			const { openType, from: url } = this.redirectInfo;
-			if (this.redirectInfo && openType === 'switchTab') {
-				uni[openType]({
-					url,
-					complete: () => {
-						this.updateRedirectInfo(null);
-					}
-				});
+	const { data: loginResult } = await uni.$http.post('/api/public/v1/users/wxlogin', query);
+	const { meta, message } = loginResult;
+	if (meta.status == 200) return uni.$showMessage('登录失败');
+	uni.$showMessage('登录成功');
+	store.commit('m_user/updateToken', TOKEN);
+
+	// 登录成功之后再跳转原来的页面
+	if (!redirectInfo.value) return;
+	const { openType = '', from: url } = redirectInfo.value;
+	if (redirectInfo.value && openType === 'switchTab') {
+		uni[openType]({
+			url,
+			complete: () => {
+				store.commit('m_user/updateRedirectInfo', null);
 			}
-		}
+		});
 	}
 };
 </script>

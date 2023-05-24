@@ -25,26 +25,19 @@
 	</view>
 </template>
 
-<script>
-import { mapState, mapMutations, mapGetters } from 'vuex';
-export default {
-	name: 'my-address',
-	data() {
-		return {};
-	},
-	computed: {
-		...mapState('m_user', ['address']),
-		...mapGetters('m_user', ['addstr'])
-	},
-	methods: {
-		...mapMutations('m_user', ['updateAddress']),
-		async chooseAddres() {
-			// 调用小程序chooseAddress方法
-			const res = await uni.chooseAddress().catch(err => err);
-			if (res.errMsg === 'chooseAddress:ok') {
-				this.updateAddress(res);
-			}
-		}
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const address = computed(() => store.state['m_user'].address);
+const addstr = computed(() => store.getters['m_user/addstr']);
+
+const chooseAddres = async () => {
+	const res = await uni.chooseAddress().catch(err => err);
+	// 调用小程序chooseAddress方法
+	if (res.errMsg === 'chooseAddress:ok') {
+		store.commit('m_user/updateAddress', res);
 	}
 };
 </script>

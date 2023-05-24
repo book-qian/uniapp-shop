@@ -9,3 +9,4 @@ const store = common_vendor.createStore({
   }
 });
 exports.store = store;
+//# sourceMappingURL=store.js.map

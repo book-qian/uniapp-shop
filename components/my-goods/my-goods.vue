@@ -14,52 +14,48 @@
 	</view>
 </template>
 
-<script>
-export default {
-	name: 'my-goods',
-	props: {
-		// 商品信息对象
-		goods: {
-			type: Object,
-			default: () => {
-				return {};
-			}
-		},
-		// 是否展示单选按钮
-		showRadio: {
-			type: Boolean,
-			default: false
-		},
-		// 是否展示数字选择
-		showNum: {
-			type: Boolean,
-			default: false
+<script setup>
+import { ref, computed } from 'vue';
+
+const props = defineProps({
+	// 商品信息对象
+	goods: {
+		type: Object,
+		default: () => {
+			return {};
 		}
 	},
-	computed: {
-		goodsPrice() {
-			return this.goods && Number(this.goods.goods_price).toFixed(2);
-		}
+	// 是否展示单选按钮
+	showRadio: {
+		type: Boolean,
+		default: false
 	},
-	data() {
-		return {
-			defaultPic: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'
-		};
-	},
-	methods: {
-		radioClickHandler(e) {
-			this.$emit('radio-change', {
-				goods_id: this.goods.goods_id,
-				goods_state: !this.goods.goods_state
-			});
-		},
-		numChangeHandler(val) {
-			this.$emit('num-change', {
-				goods_id: this.goods.goods_id,
-				goods_count: +val
-			});
-		}
+	// 是否展示数字选择
+	showNum: {
+		type: Boolean,
+		default: false
 	}
+});
+
+const emits = defineEmits(['radio-change', 'num-change']);
+
+const goodsPrice = computed(() => {
+	return props.goods && Number(props.goods.goods_price).toFixed(2);
+});
+const defaultPic = ref('https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg');
+
+const radioClickHandler = e => {
+	emits('radio-change', {
+		goods_id: props.goods.goods_id,
+		goods_state: !props.goods.goods_state
+	});
+};
+
+const numChangeHandler = val => {
+	emits('num-change', {
+		goods_id: props.goods.goods_id,
+		goods_count: +val
+	});
 };
 </script>
 

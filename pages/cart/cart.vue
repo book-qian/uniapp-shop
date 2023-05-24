@@ -25,44 +25,44 @@
 	</view>
 </template>
 
-<script>
-import badgeMix from '@/minxins/tabbar-badge.js';
-import { mapState, mapMutations } from 'vuex';
-export default {
-	mixins: [badgeMix],
-	computed: {
-		...mapState('m_cart', ['cart'])
-	},
-	data() {
-		return {
-			options: [
-				{
-					text: '删除',
-					style: {
-						backgroundColor: '#C00000'
-					}
-				}
-			]
-		};
-	},
-	methods: {
-		...mapMutations('m_cart', ['updateGoodsState', 'updateGoodsCount', 'deleteCartGoods']),
-		radioChangeHandler(e) {
-			this.updateGoodsState(e);
-		},
-		numChangeHandler(e) {
-			this.updateGoodsCount(e);
-		},
-		swiperItemClickHandler({ goods_id }) {
-			this.deleteCartGoods(goods_id);
-			// 动态为tarbar设置数字徽标
-			uni.setTabBarBadge({
-				index: 2,
-				text: this.total + ''
-			});
+<script setup>
+import { ref, computed } from 'vue';
+import { onLoad, onShow } from '@dcloudio/uni-app';
+import { setBarge } from '@/hook/useTabbarBadge.js';
+import { useStore } from 'vuex';
+
+const store = useStore();
+// 购物车数据
+const cart = computed(() => store.state['m_cart'].cart);
+
+const options = ref([
+	{
+		text: '删除',
+		style: {
+			backgroundColor: '#C00000'
 		}
 	}
+]);
+// 更新购物车商品状态
+const radioChangeHandler = e => store.commit('m_cart/updateGoodsState', e);
+
+// 更新购物车商品数量
+const numChangeHandler = e => store.commit('m_cart/updateGoodsCount', e);
+
+const total = computed(() => store.getters['m_cart/total']);
+// 删除购物车商品
+const swiperItemClickHandler = ({ goods_id }) => {
+	store.commit('m_cart/deleteCartGoods', goods_id);
+	// 更新tarbar数字徽标
+	uni.setTabBarBadge({
+		index: 2,
+		text: total.value + ''
+	});
 };
+
+onShow(() => {
+	setBarge();
+});
 </script>
 
 <style lang="scss">

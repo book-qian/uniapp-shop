@@ -69,32 +69,24 @@
 	</view>
 </template>
 
-<script>
-import { mapState, mapMutations } from 'vuex';
-export default {
-	name: 'my-userinfo',
-	data() {
-		return {};
-	},
-	computed: {
-		...mapState('m_user', ['userinfo'])
-	},
-	methods: {
-		...mapMutations('m_user', ['updateAddress', 'updateUserinfo', 'updateToken']),
-		async logout() {
-			const { confirm } = await uni
-				.showModal({
-					title: '提示',
-					content: '确认退出登录吗？'
-				})
-				.catch(err => err);
+<script setup>
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore();
+const userinfo = computed(() => store.state['m_user'].userinfo);
 
-			if (confirm) {
-				this.updateAddress({});
-				this.updateUserinfo({});
-				this.updateToken('');
-			}
-		}
+const logout = async () => {
+	const { confirm } = await uni
+		.showModal({
+			title: '提示',
+			content: '确认退出登录吗？'
+		})
+		.catch(err => err);
+
+	if (confirm) {
+		store.commit('m_user/updateAddress', {});
+		store.commit('m_user/updateUserinfo', {});
+		store.commit('m_user/updateToken', '');
 	}
 };
 </script>

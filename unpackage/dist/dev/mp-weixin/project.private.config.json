@@ -4,13 +4,13 @@
   "setting": {
     "compileHotReLoad": false
   },
-  "libVersion": "2.31.1",
+  "libVersion": "2.32.0",
   "condition": {
     "miniprogram": {
       "list": [
         {
           "name": "",
-          "pathName": "pages/cate/cate",
+          "pathName": "pages/cart/cart",
           "query": "",
           "launchMode": "default",
           "scene": null
@@ -33,13 +33,6 @@
           "name": "",
           "pathName": "subpkg/goods_detail/goods_detail",
           "query": "goods_id=395",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "",
-          "pathName": "pages/cart/cart",
-          "query": "",
           "launchMode": "default",
           "scene": null
         },

@@ -26,53 +26,54 @@
 	</view>
 </template>
 
-<script>
-import badgeMix from '@/minxins/tabbar-badge.js';
-export default {
-	mixins: [badgeMix],
-	data() {
-		return {
-			wh: 0, //当前屏幕可使用高度
-			cateList: [],
-			active: 0,
-			cateLevel2: [], //二级分类
-			scrollTop: 0
-		};
-	},
-	async onLoad() {
-		const { windowHeight } = await uni.getSystemInfo();
-		this.wh = windowHeight - 50;
-		this.getCateListData();
-	},
-	methods: {
-		// 获取分类列表的数据
-		async getCateListData() {
-			const { data: res } = await uni.$http.get('/api/public/v1/categories');
-			const { meta, message } = res;
-			if (meta.status !== 200) uni.$showMessage();
-			console.log(message);
-			this.cateList = message;
-			this.cateLevel2 = message[0].children;
-		},
-		activeChange(i) {
-			this.active = i;
-			// 更新二级分类数据
-			this.cateLevel2 = this.cateList[i].children;
-			// 回到顶部
-			this.scrollTop = this.scrollTop === 0 ? 1 : 0;
-		},
-		gotoGoodsList({ cat_id }) {
-			uni.navigateTo({
-				url: '/subpkg/goods_list/goods_list?cid=' + cat_id
-			});
-		},
-		gotoSearch() {
-			uni.navigateTo({
-				url: '/subpkg/search/search'
-			});
-		}
-	}
+<script setup>
+import { ref } from 'vue';
+import { onLoad, onShow } from '@dcloudio/uni-app';
+import { setBarge } from '@/hook/useTabbarBadge.js';
+
+const cateList = ref([]);
+const cateLevel2 = ref([]);
+
+const getCateListData = async () => {
+	const { data: res } = await uni.$http.get('/api/public/v1/categories');
+	const { meta, message } = res;
+	if (meta.status !== 200) uni.$showMessage();
+	cateList.value = message;
+	cateLevel2.value = message[0].children;
 };
+
+const active = ref(0);
+const scrollTop = ref(0);
+const activeChange = i => {
+	active.value = i;
+	// 更新二级分类数据
+	cateLevel2.value = cateList.value[i].children;
+	// 回到顶部
+	scrollTop.value = scrollTop.value === 0 ? 1 : 0;
+};
+
+const gotoGoodsList = ({ cat_id }) => {
+	uni.navigateTo({
+		url: '/subpkg/goods_list/goods_list?cid=' + cat_id
+	});
+};
+
+const gotoSearch = () => {
+	uni.navigateTo({
+		url: '/subpkg/search/search'
+	});
+};
+
+const wh = ref(0); //当前屏幕可使用高度
+onLoad(async () => {
+	const { windowHeight } = await uni.getSystemInfo();
+	wh.value = windowHeight - 50;
+	getCateListData();
+});
+
+onShow(() => {
+	setBarge();
+});
 </script>
 
 <style lang="scss">

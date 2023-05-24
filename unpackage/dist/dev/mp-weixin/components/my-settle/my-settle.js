@@ -1,42 +1,59 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
-  name: "my-settle",
-  computed: {
-    ...common_vendor.mapGetters("m_cart", ["checkedCount", "allCount", "checkedGoodsAmount"]),
-    ...common_vendor.mapGetters("m_user", ["addstr"]),
-    ...common_vendor.mapState("m_user", ["token"]),
-    ...common_vendor.mapState("m_cart", ["cart"]),
-    isFullChecked() {
-      return this.allCount === this.checkedCount;
-    }
-  },
-  data() {
-    return {
-      seconds: 3,
-      //倒计时的秒数
-      timer: null
-      //定时器id
-    };
-  },
-  methods: {
-    ...common_vendor.mapMutations("m_cart", ["updateAllGoodsState"]),
-    ...common_vendor.mapMutations("m_user", ["updateRedirectInfo"]),
-    changeState() {
-      this.updateAllGoodsState(!this.isFullChecked);
-    },
-    // 用户结算
-    settlement() {
-      if (!this.checkedCount)
+  __name: "my-settle",
+  setup(__props) {
+    const store = common_vendor.useStore();
+    const allCount = common_vendor.computed(() => store.getters["m_cart/allCount"]);
+    const checkedCount = common_vendor.computed(() => store.getters["m_cart/checkedCount"]);
+    const isFullChecked = common_vendor.computed(() => allCount.value === checkedCount.value);
+    const changeState = () => store.commit("m_cart/updateAllGoodsState", !isFullChecked.value);
+    const addstr = common_vendor.computed(() => store.getters["m_user/addstr"]);
+    const token = common_vendor.computed(() => store.state["m_user"].token);
+    const settlement = () => {
+      if (!checkedCount.value)
         return common_vendor.index.$showMessage("请先勾选商品");
-      if (!this.addstr)
+      if (!addstr.value)
         return common_vendor.index.$showMessage("请先选择地址");
-      if (!this.token)
-        return this.delayNavigation();
-      this.payOrder();
-    },
-    async payOrder() {
-      const goods = this.cart.filter((t) => t.goods_state).map((s) => {
+      if (!token.value)
+        return delayNavigation();
+      payOrder();
+    };
+    const seconds = common_vendor.ref(3);
+    const timer = common_vendor.ref(null);
+    const delayNavigation = () => {
+      showTips(seconds.value);
+      timer.value = setInterval(() => {
+        seconds.value--;
+        if (seconds.value <= 0) {
+          clearInterval(timer.value);
+          common_vendor.index.switchTab({
+            url: "/pages/my/my",
+            success: () => {
+              store.commit("m_user/updateRedirectInfo", {
+                openType: "switchTab",
+                from: "/pages/cart/cart"
+              });
+            }
+          });
+          return;
+        }
+        showTips(seconds.value);
+      }, 1e3);
+    };
+    const showTips = (n) => {
+      common_vendor.index.showToast({
+        title: `请登录后再结算，${n}秒之后将跳转登录页面`,
+        icon: "none",
+        mask: true,
+        // 添加遮罩层，防止点击穿透
+        duration: 1500
+      });
+    };
+    const checkedGoodsAmount = common_vendor.computed(() => store.getters["m_cart/checkedGoodsAmount"]);
+    const payOrder = async () => {
+      const cartResult = common_vendor.computed(() => store.state["m_cart"].cart);
+      const goods = cartResult.value.filter((t) => t.goods_state).map((s) => {
         return {
           goods_id: s.goods_id,
           goods_number: s.goods_count,
@@ -44,9 +61,9 @@ const _sfc_main = {
         };
       });
       const orderInfo = {
-        // order_price: this.checkedGoodsAmount
-        order_price: 0.01,
-        consignee_addr: this.addstr,
+        // order_price: checkedGoodsAmount
+        order_price: "0.01",
+        consignee_addr: addstr.value,
         goods
       };
       const { data } = await common_vendor.index.$http.post("/api/public/v1/my/orders/create", orderInfo);
@@ -74,49 +91,18 @@ const _sfc_main = {
           return common_vendor.index.$showMessage("订单未支付！");
         }
       });
-    },
-    // 展示倒计时的信息
-    showTips(n) {
-      common_vendor.index.showToast({
-        title: `请登录后再结算，${n}秒之后将跳转登录页面`,
-        icon: "none",
-        mask: true,
-        // 添加遮罩层，防止点击穿透
-        duration: 1500
-      });
-    },
-    // 延迟跳转到我的页面
-    delayNavigation() {
-      this.seconds = 3;
-      this.showTips(this.seconds);
-      this.timer = setInterval(() => {
-        this.seconds--;
-        if (this.seconds <= 0) {
-          clearInterval(this.timer);
-          common_vendor.index.switchTab({
-            url: "/pages/my/my",
-            success: () => {
-              this.updateRedirectInfo({
-                openType: "switchTab",
-                from: "/pages/cart/cart"
-              });
-            }
-          });
-          return;
-        }
-        this.showTips(this.seconds);
-      }, 1e3);
-    }
+    };
+    return (_ctx, _cache) => {
+      return {
+        a: common_vendor.unref(isFullChecked),
+        b: common_vendor.o(changeState),
+        c: common_vendor.t(common_vendor.unref(checkedGoodsAmount)),
+        d: common_vendor.t(common_vendor.unref(checkedCount)),
+        e: common_vendor.o(settlement)
+      };
+    };
   }
 };
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return {
-    a: $options.isFullChecked,
-    b: common_vendor.o((...args) => $options.changeState && $options.changeState(...args)),
-    c: common_vendor.t(_ctx.checkedGoodsAmount),
-    d: common_vendor.t(_ctx.checkedCount),
-    e: common_vendor.o((...args) => $options.settlement && $options.settlement(...args))
-  };
-}
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/yangyongqian/code/uni-shop/components/my-settle/my-settle.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "/Users/yangyongqian/code/uni-shop/components/my-settle/my-settle.vue"]]);
 wx.createComponent(Component);
+//# sourceMappingURL=my-settle.js.map

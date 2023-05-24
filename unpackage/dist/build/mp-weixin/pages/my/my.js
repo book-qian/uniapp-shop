@@ -1,0 +1,2 @@
+"use strict";const e=require("../../common/vendor.js"),o=require("../../hook/useTabbarBadge.js");if(!Array){(e.resolveComponent("my-login")+e.resolveComponent("my-userinfo"))()}Math||((()=>"../../components/my-login/my-login.js")+(()=>"../../components/my-userinfo/my-userinfo.js"))();const n={__name:"my",setup(n){const r=e.useStore(),s=e.computed((()=>r.state.m_user.token));return e.onShow((()=>{o.setBarge()})),(o,n)=>e.e({a:!e.unref(s)},(e.unref(s),{}))}};wx.createPage(n);
+//# sourceMappingURL=my.js.map

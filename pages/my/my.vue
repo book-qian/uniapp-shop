@@ -5,18 +5,18 @@
 	</view>
 </template>
 
-<script>
-import badgeMix from '@/minxins/tabbar-badge.js';
-import { mapState } from 'vuex';
-export default {
-	mixins: [badgeMix],
-	computed: {
-		...mapState('m_user', ['token'])
-	},
-	data() {
-		return {};
-	}
-};
+<script setup>
+import { ref, computed } from 'vue';
+import { onLoad, onShow } from '@dcloudio/uni-app';
+import { setBarge } from '@/hook/useTabbarBadge.js';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const token = computed(() => store.state['m_user'].token);
+
+onShow(() => {
+	setBarge();
+});
 </script>
 
 <style lang="scss">

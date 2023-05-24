@@ -1,40 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const minxins_tabbarBadge = require("../../minxins/tabbar-badge.js");
-const _sfc_main = {
-  mixins: [minxins_tabbarBadge.badgeMix],
-  computed: {
-    ...common_vendor.mapState("m_cart", ["cart"])
-  },
-  data() {
-    return {
-      options: [
-        {
-          text: "删除",
-          style: {
-            backgroundColor: "#C00000"
-          }
-        }
-      ]
-    };
-  },
-  methods: {
-    ...common_vendor.mapMutations("m_cart", ["updateGoodsState", "updateGoodsCount", "deleteCartGoods"]),
-    radioChangeHandler(e) {
-      this.updateGoodsState(e);
-    },
-    numChangeHandler(e) {
-      this.updateGoodsCount(e);
-    },
-    swiperItemClickHandler({ goods_id }) {
-      this.deleteCartGoods(goods_id);
-      common_vendor.index.setTabBarBadge({
-        index: 2,
-        text: this.total + ""
-      });
-    }
-  }
-};
+const hook_useTabbarBadge = require("../../hook/useTabbarBadge.js");
 if (!Array) {
   const _easycom_my_address2 = common_vendor.resolveComponent("my-address");
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
@@ -53,39 +19,68 @@ const _easycom_my_settle = () => "../../components/my-settle/my-settle.js";
 if (!Math) {
   (_easycom_my_address + _easycom_uni_icons + _easycom_my_goods + _easycom_uni_swipe_action_item + _easycom_uni_swipe_action + _easycom_my_settle)();
 }
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return common_vendor.e({
-    a: _ctx.cart.length > 0
-  }, _ctx.cart.length > 0 ? {
-    b: common_vendor.p({
-      type: "shop",
-      size: "18"
-    }),
-    c: common_vendor.f(_ctx.cart, (goods, i, i0) => {
-      return {
-        a: common_vendor.o($options.radioChangeHandler, i),
-        b: common_vendor.o($options.numChangeHandler, i),
-        c: "2cb99d08-4-" + i0 + "," + ("2cb99d08-3-" + i0),
-        d: common_vendor.p({
-          goods,
-          ["show-radio"]: true,
-          ["show-num"]: true
+const _sfc_main = {
+  __name: "cart",
+  setup(__props) {
+    const store = common_vendor.useStore();
+    const cart = common_vendor.computed(() => store.state["m_cart"].cart);
+    const options = common_vendor.ref([
+      {
+        text: "删除",
+        style: {
+          backgroundColor: "#C00000"
+        }
+      }
+    ]);
+    const radioChangeHandler = (e) => store.commit("m_cart/updateGoodsState", e);
+    const numChangeHandler = (e) => store.commit("m_cart/updateGoodsCount", e);
+    const total = common_vendor.computed(() => store.getters["m_cart/total"]);
+    const swiperItemClickHandler = ({ goods_id }) => {
+      store.commit("m_cart/deleteCartGoods", goods_id);
+      common_vendor.index.setTabBarBadge({
+        index: 2,
+        text: total.value + ""
+      });
+    };
+    common_vendor.onShow(() => {
+      hook_useTabbarBadge.setBarge();
+    });
+    return (_ctx, _cache) => {
+      return common_vendor.e({
+        a: common_vendor.unref(cart).length > 0
+      }, common_vendor.unref(cart).length > 0 ? {
+        b: common_vendor.p({
+          type: "shop",
+          size: "18"
         }),
-        e: common_vendor.o(($event) => $options.swiperItemClickHandler(goods), i),
-        f: "2cb99d08-3-" + i0 + ",2cb99d08-2",
-        g: i
-      };
-    }),
-    d: common_vendor.p({
-      ["right-options"]: $data.options
-    })
-  } : {
-    e: common_vendor.p({
-      type: "cart",
-      size: "40",
-      color: "#c00000"
-    })
-  });
-}
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/yangyongqian/code/uni-shop/pages/cart/cart.vue"]]);
+        c: common_vendor.f(common_vendor.unref(cart), (goods, i, i0) => {
+          return {
+            a: common_vendor.o(radioChangeHandler, i),
+            b: common_vendor.o(numChangeHandler, i),
+            c: "2cb99d08-4-" + i0 + "," + ("2cb99d08-3-" + i0),
+            d: common_vendor.p({
+              goods,
+              ["show-radio"]: true,
+              ["show-num"]: true
+            }),
+            e: common_vendor.o(($event) => swiperItemClickHandler(goods), i),
+            f: "2cb99d08-3-" + i0 + ",2cb99d08-2",
+            g: i
+          };
+        }),
+        d: common_vendor.p({
+          ["right-options"]: options.value
+        })
+      } : {
+        e: common_vendor.p({
+          type: "cart",
+          size: "40",
+          color: "#c00000"
+        })
+      });
+    };
+  }
+};
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "/Users/yangyongqian/code/uni-shop/pages/cart/cart.vue"]]);
 wx.createPage(MiniProgramPage);
+//# sourceMappingURL=cart.js.map

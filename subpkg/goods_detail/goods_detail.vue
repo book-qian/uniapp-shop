@@ -1,17 +1,17 @@
 <template>
-	<view v-if="goodsInfo.goods_name" class="goods-detail-container">
+	<view v-if="goodsDetail.goodsInfo?.goods_name" class="goods-detail-container">
 		<!-- 轮播图区域 -->
 		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" :circular="true">
-			<swiper-item v-for="(item, i) in goodsInfo.pics" :key="i" @click="preview(i)"><image :src="item.pics_big"></image></swiper-item>
+			<swiper-item v-for="(item, i) in goodsDetail.goodsInfo?.pics" :key="i" @click="preview(i)"><image :src="item.pics_big"></image></swiper-item>
 		</swiper>
 		<!-- 商品信息区域 -->
 		<view class="goods-info-box">
 			<!-- 商品价格 -->
-			<view class="goods-price">￥{{ goodsInfo.goods_price }}</view>
+			<view class="goods-price">￥{{ goodsDetail.goodsInfo?.goods_price }}</view>
 			<!-- 商品信息主体区域 -->
 			<view class="goods-info-body">
 				<!-- 商品名称 -->
-				<view class="goods-name">{{ goodsInfo.goods_name }}</view>
+				<view class="goods-name">{{ goodsDetail.goodsInfo?.goods_name }}</view>
 				<!-- 收藏 -->
 				<view class="goods-favr">
 					<uni-icons type="star" size="18" color="gray"></uni-icons>
@@ -22,103 +22,104 @@
 			<view class="yf">快递：免运费</view>
 		</view>
 		<!-- 商品介绍 -->
-		<rich-text :nodes="goodsInfo.goods_introduce"></rich-text>
+		<rich-text :nodes="goodsDetail.goodsInfo?.goods_introduce"></rich-text>
 
 		<!-- 商品导航区域 -->
-		<view class="goods-nav"><uni-goods-nav :fill="true" :options="options" :buttonGroup="buttonGroup" @click="onClick" @buttonClick="buttonClick" /></view>
+		<view class="goods-nav">
+			<uni-goods-nav :fill="true" :options="goodsDetail.options" :buttonGroup="goodsDetail.buttonGroup" @click="onClick" @buttonClick="buttonClick" />
+		</view>
 	</view>
 </template>
 
-<script>
-import { mapGetters, mapMutations } from 'vuex';
-export default {
-	data() {
-		return {
-			goodsInfo: {},
-			options: [
-				{
-					icon: 'shop',
-					text: '店铺'
-				},
-				{
-					icon: 'cart',
-					text: '购物车',
-					info: 0
-				}
-			],
-			buttonGroup: [
-				{
-					text: '加入购物车',
-					backgroundColor: '#ff0000',
-					color: '#fff'
-				},
-				{
-					text: '立即购买',
-					backgroundColor: '#ffa200',
-					color: '#fff'
-				}
-			]
-		};
-	},
-	onLoad(option) {
-		let goods_id = option.goods_id;
-		this.getGoodsInfo(goods_id);
-	},
-	watch: {
-		total: {
-			handler(newVal) {
-				const findResult = this.options.find(t => t.text === '购物车');
-				if (findResult) {
-					findResult.info = newVal;
-				}
-			},
-			immediate: true
+<script setup>
+import { ref, computed, reactive, watch } from 'vue';
+import { onLoad } from '@dcloudio/uni-app';
+import { useStore } from 'vuex';
+const store = useStore();
+const goodsDetail = reactive({
+	goodsInfo: {},
+	options: [
+		{
+			icon: 'shop',
+			text: '店铺'
+		},
+		{
+			icon: 'cart',
+			text: '购物车',
+			info: 0
+		}
+	],
+	buttonGroup: [
+		{
+			text: '加入购物车',
+			backgroundColor: '#ff0000',
+			color: '#fff'
+		},
+		{
+			text: '立即购买',
+			backgroundColor: '#ffa200',
+			color: '#fff'
+		}
+	]
+});
+
+const total = computed(() => store.getters['m_cart/total']);
+watch(
+	() => total.value,
+	newVal => {
+		const findResult = goodsDetail.options.find(t => t.text === '购物车');
+		if (findResult) {
+			findResult.info = newVal;
 		}
 	},
-	computed: {
-		...mapGetters('m_cart', ['total'])
-	},
-	methods: {
-		...mapMutations('m_cart', ['addToCart']),
-		// 左侧导航点击
-		onClick(e) {
-			if (e.content.text === '购物车') {
-				uni.switchTab({
-					url: '/pages/cart/cart'
-				});
-			}
-		},
-		// 右侧点击
-		buttonClick(e) {
-			if (e.content.text === '加入购物车') {
-				// 组织商品对象 goods_id goods_name goods_price goods_count goods_small_logo goods_state
-				const { goods_id, goods_name, goods_price, goods_small_logo } = this.goodsInfo;
-				let goods = {
-					goods_id,
-					goods_name,
-					goods_price,
-					goods_small_logo,
-					goods_count: 1,
-					goods_state: true
-				};
-				this.addToCart(goods);
-			}
-		},
-		// 右侧导航点击
-		async getGoodsInfo(goods_id) {
-			const { data: res } = await uni.$http.get('/api/public/v1/goods/detail', { goods_id });
-			const { meta, message } = res;
-			if (meta.status !== 200) return uni.$showMessage();
-			message.goods_introduce = message.goods_introduce.replace(/<img /g, '<img style="display:block;" ').replace(/webp,'jpg'/g);
-			this.goodsInfo = message;
-		},
-		preview(i) {
-			uni.previewImage({
-				urls: this.goodsInfo.pics.map(t => t.pics_big),
-				current: i
-			});
-		}
+	{ immediate: true }
+);
+// 左侧导航点击
+const onClick = e => {
+	if (e.content.text === '购物车') {
+		uni.switchTab({
+			url: '/pages/cart/cart'
+		});
 	}
+};
+
+// 右侧点击
+const buttonClick = e => {
+	if (e.content.text === '加入购物车') {
+		// 组织商品对象 goods_id goods_name goods_price goods_count goods_small_logo goods_state
+		const { goods_id, goods_name, goods_price, goods_small_logo } = goodsDetail.goodsInfo;
+		let goods = {
+			goods_id,
+			goods_name,
+			goods_price,
+			goods_small_logo,
+			goods_count: 1,
+			goods_state: true
+		};
+		// 添加购物车
+		store.commit('m_cart/addToCart', goods);
+	}
+};
+
+// 右侧导航点击
+const getGoodsInfo = async goods_id => {
+	const { data: res } = await uni.$http.get('/api/public/v1/goods/detail', { goods_id });
+	const { meta, message } = res;
+	if (meta.status !== 200) return uni.$showMessage();
+	message.goods_introduce = message.goods_introduce.replace(/<img /g, '<img style="display:block;" ').replace(/webp,'jpg'/g);
+
+	goodsDetail.goodsInfo = message;
+};
+
+onLoad(({ goods_id }) => {
+	getGoodsInfo(goods_id);
+});
+
+const preview = i => {
+	uni.previewImage({
+		urls: goodsDetail.goodsInfo.pics.map(t => t.pics_big),
+		current: i
+	});
 };
 </script>
 

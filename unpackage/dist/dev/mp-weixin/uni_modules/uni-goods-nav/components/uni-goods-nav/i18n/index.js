@@ -23,3 +23,4 @@ const messages = {
   "zh-Hant": zhHant
 };
 exports.messages = messages;
+//# sourceMappingURL=index.js.map

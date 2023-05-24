@@ -1171,3 +1171,4 @@ const icons = {
   ]
 };
 exports.icons = icons;
+//# sourceMappingURL=icons.js.map

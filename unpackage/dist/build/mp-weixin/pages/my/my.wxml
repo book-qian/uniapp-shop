@@ -1,0 +1,1 @@
+<view class="my-container"><my-login wx:if="{{a}}" u-i="d0ac7c70-0" bind:__l="__l"></my-login><my-userinfo wx:else u-i="d0ac7c70-1" bind:__l="__l"></my-userinfo></view>

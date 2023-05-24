@@ -1,0 +1,1 @@
+.cart-container{padding-bottom:50px}.cart-title{height:40px;display:flex;align-items:center;padding-left:5px;border-bottom:1px solid #efefef}.cart-title .cart-title-text{margin-left:10px}.empty-cart{display:flex;flex-direction:column;align-items:center;padding-top:150px}.empty-cart .empty-img{width:90px;height:90px}.empty-cart .tips-text{font-size:12px;color:gray;margin-top:15px}

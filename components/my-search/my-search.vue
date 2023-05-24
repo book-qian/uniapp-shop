@@ -7,27 +7,22 @@
 	</view>
 </template>
 
-<script>
-export default {
-	name: 'my-search',
-	props: {
-		bgcolor: {
-			type: String,
-			default: '#C00000'
-		},
-		radius: {
-			type: Number,
-			default: 18 // 单位px
-		}
+<script setup>
+const props = defineProps({
+	bgcolor: {
+		type: String,
+		default: '#C00000'
 	},
-	data() {
-		return {};
-	},
-	methods: {
-		searchBoxHander() {
-			this.$emit('handle-click');
-		}
+	radius: {
+		type: Number,
+		default: 18 // 单位px
 	}
+});
+
+const emits = defineEmits(['handle-click']);
+
+const searchBoxHander = () => {
+	emits('handle-click');
 };
 </script>
 

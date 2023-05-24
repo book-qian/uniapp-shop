@@ -1,0 +1,1 @@
+{"version":3,"file":"useTabbarBadge.js","sources":["../../../../../hook/useTabbarBadge.js"],"sourcesContent":null,"names":["store","useStore","total","computed","getters","uni","setTabBarBadge","index","text","value"],"mappings":"qEAOO,WACA,MAAAA,EAAQC,EAAAA,WACRC,EAAQC,EAAAA,UAAS,IAAMH,EAAMI,QAAQ,kBAC3CC,EAAAA,MAAIC,eAAe,CAClBC,MAAO,EACPC,KAAMN,EAAMO,MAAQ,IAEtB"}

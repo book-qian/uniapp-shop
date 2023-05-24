@@ -40,64 +40,67 @@
 	</view>
 </template>
 
-<script>
-import badgeMix from '@/minxins/tabbar-badge.js';
-export default {
-	mixins: [badgeMix],
-	data() {
-		return {
-			swiperList: [],
-			navList: [],
-			floorList: []
-		};
-	},
-	onLoad() {
-		this.getSwiperData();
-		this.getNavListData();
-		this.getFloorListData();
-	},
-	methods: {
-		async getSwiperData() {
-			const { data: res } = await uni.$http.get('/api/public/v1/home/swiperdata');
-			const { meta, message } = res;
-			// 请求失败
-			if (meta.status !== 200) {
-				return uni.$showMessage();
-			}
-			this.swiperList = message;
-		},
-		async getNavListData() {
-			const { data: res } = await uni.$http.get('/api/public/v1/home/catitems');
-			const { meta, message } = res;
-			if (meta.status !== 200) uni.$showMessage();
-			this.navList = message;
-		},
-		navClickHander(item) {
-			if (item.name === '分类') {
-				uni.switchTab({
-					url: '/pages/cate/cate'
-				});
-			}
-		},
-		async getFloorListData() {
-			const { data: res } = await uni.$http.get('/api/public/v1/home/floorData');
-			const { meta, message } = res;
-			if (meta.status !== 200) return uni.$showMessage();
-			//对数据进行处理
-			message.forEach(floor => {
-				floor.product_list.forEach(prod => {
-					prod.url = `/subpkg/goods_list/goods_list?${prod.navigator_url.split('?')[1]}`;
-				});
-			});
-			this.floorList = message;
-		},
-		gotoSearch() {
-			uni.navigateTo({
-				url: '/subpkg/search/search'
-			});
-		}
+<script setup>
+import { ref } from 'vue';
+import { onLoad, onShow } from '@dcloudio/uni-app';
+import { setBarge } from '@/hook/useTabbarBadge.js';
+const swiperList = ref([]);
+const navList = ref([]);
+const floorList = ref([]);
+
+const getSwiperData = async () => {
+	const { data: res } = await uni.$http.get('/api/public/v1/home/swiperdata');
+	const { meta, message } = res;
+	// 请求失败
+	if (meta.status !== 200) {
+		return uni.$showMessage();
+	}
+	swiperList.value = message;
+};
+
+const getNavListData = async () => {
+	const { data: res } = await uni.$http.get('/api/public/v1/home/catitems');
+	const { meta, message } = res;
+	if (meta.status !== 200) uni.$showMessage();
+	navList.value = message;
+};
+
+const navClickHander = item => {
+	if (item.name === '分类') {
+		uni.switchTab({
+			url: '/pages/cate/cate'
+		});
 	}
 };
+
+const getFloorListData = async () => {
+	const { data: res } = await uni.$http.get('/api/public/v1/home/floorData');
+	const { meta, message } = res;
+	if (meta.status !== 200) return uni.$showMessage();
+	//对数据进行处理
+	message.forEach(floor => {
+		floor.product_list.forEach(prod => {
+			prod.url = `/subpkg/goods_list/goods_list?${prod.navigator_url.split('?')[1]}`;
+		});
+	});
+	floorList.value = message;
+};
+
+const gotoSearch = () => {
+	uni.navigateTo({
+		url: '/subpkg/search/search'
+	});
+};
+
+onShow(() => {
+	setBarge();
+});
+
+onLoad(() => {
+	getSwiperData();
+	getNavListData();
+	getFloorListData();
+});
 </script>
 <style lang="scss">
 swiper {

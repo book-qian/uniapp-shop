@@ -20,72 +20,66 @@
 	</view>
 </template>
 
-<script>
-export default {
-	data() {
-		return {
-			// 防抖处理
-			timer: null,
-			kw: '',
-			searchResult: [],
-			// 搜索历史
-			searchHistory: []
-		};
-	},
-	computed: {
-		histories() {
-			return [...this.searchHistory].reverse();
-		}
-	},
-	onLoad() {
-		this.searchHistory = JSON.parse(uni.getStorageSync('kw') || '[]');
-	},
-	methods: {
-		input(value) {
-			clearTimeout(this.timer);
-			this.timer = setTimeout(() => {
-				this.kw = value;
-				// 根据关键字查询搜索建议列表
-				this.getSearchList();
-			}, 500);
-		},
-		async getSearchList() {
-			if (this.kw.length === 0) {
-				this.searchResult = [];
-				return;
-			}
-			const { data: res } = await uni.$http.get('/api/public/v1/goods/qsearch', { query: this.kw });
-			const { meta, message } = res;
-			if (meta.status !== 200) return uni.$showMessage();
+<script setup>
+import { ref, computed } from 'vue';
+import { onLoad } from '@dcloudio/uni-app';
 
-			this.searchResult = message;
-			this.saveHistory();
-			console.log(this.searchResult);
-		},
-		gotoGoodsDetail({ goods_id }) {
-			uni.navigateTo({
-				url: '/subpkg/goods_detail/goods_detail?goods_id=' + goods_id
-			});
-		},
-		saveHistory() {
-			const set = new Set(this.searchHistory);
-			set.delete(this.kw);
-			set.add(this.kw);
-			this.searchHistory = Array.from(set);
-			//搜索历史的持久化存储
-			uni.setStorageSync('kw', JSON.stringify(this.searchHistory));
-		},
-		clean() {
-			this.searchHistory = [];
-			uni.setStorageSync('kw', '[]');
-		},
-		gotoGoodsList(item) {
-			uni.navigateTo({
-				url: '/subpkg/goods_list/goods_list?query=' + item
-			});
-		}
-	}
+const searchHistory = ref([]);
+const kw = ref('');
+const saveHistory = () => {
+	const set = new Set(searchHistory.value);
+	set.delete(kw.value);
+	set.add(kw.value);
+	searchHistory.value = Array.from(set);
+	//搜索历史的持久化存储
+	uni.setStorageSync('kw', JSON.stringify(searchHistory.value));
 };
+
+const clean = () => {
+	searchHistory.value = [];
+	uni.setStorageSync('kw', '[]');
+};
+
+const gotoGoodsList = item => {
+	uni.navigateTo({
+		url: '/subpkg/goods_list/goods_list?query=' + item
+	});
+};
+
+const gotoGoodsDetail = ({ goods_id }) => {
+	uni.navigateTo({
+		url: '/subpkg/goods_detail/goods_detail?goods_id=' + goods_id
+	});
+};
+
+const searchResult = ref([]);
+const getSearchList = async () => {
+	if (kw.value.length === 0) {
+		searchResult.value = [];
+		return;
+	}
+	const { data: res } = await uni.$http.get('/api/public/v1/goods/qsearch', { query: kw.value });
+	const { meta, message } = res;
+	if (meta.status !== 200) return uni.$showMessage();
+
+	searchResult.value = message;
+	saveHistory();
+};
+
+const timer = ref(null); // 防抖处理
+const input = value => {
+	clearTimeout(timer.value);
+	timer.value = setTimeout(() => {
+		kw.value = value;
+		getSearchList();
+	}, 500);
+};
+
+const histories = computed(() => [...searchHistory.value].reverse());
+
+onLoad(() => {
+	searchHistory.value = JSON.parse(uni.getStorageSync('kw') || '[]');
+});
 </script>
 
 <style lang="scss">
