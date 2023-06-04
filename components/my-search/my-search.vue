@@ -11,7 +11,7 @@
 const props = defineProps({
 	bgcolor: {
 		type: String,
-		default: '#C00000'
+		default: '#f2ba4b'
 	},
 	radius: {
 		type: Number,
@@ -29,7 +29,6 @@ const searchBoxHander = () => {
 <style lang="scss">
 .my-search-container {
 	height: 50px;
-	// background-color: #c00000;
 	display: flex;
 	align-items: center;
 	padding: 0 10px;
@@ -37,7 +36,6 @@ const searchBoxHander = () => {
 		width: 100%;
 		height: 36px;
 		background-color: #fff;
-		// border-radius: 18px;
 		display: flex;
 		justify-content: center;
 		align-items: center;

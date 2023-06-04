@@ -17,7 +17,7 @@
 				<view class="cate-level3-list">
 					<!-- 三级分类的item项 -->
 					<view class="cate-level3-item" v-for="(item3, i3) in item2.children" :key="i3" @click="gotoGoodsList(item3)">
-						<image :src="item3.cat_icon"></image>
+						<image :src="item3.cat_icon.includes('api-hmugo-web.itheima.net') ? item3.cat_icon : `${BASE_URL}${item3.cat_icon}`"></image>
 						<text>{{ item3.cat_name }}</text>
 					</view>
 				</view>
@@ -30,12 +30,14 @@
 import { ref } from 'vue';
 import { onLoad, onShow } from '@dcloudio/uni-app';
 import { setBarge } from '@/hook/useTabbarBadge.js';
+import { ajaxGet, fetchGet } from '@/utils/api.js';
 
+const BASE_URL = ref(process.env.VUE_APP_BASE_URL);
 const cateList = ref([]);
 const cateLevel2 = ref([]);
 
 const getCateListData = async () => {
-	const { data: res } = await uni.$http.get('/api/public/v1/categories');
+	const { data: res } = await ajaxGet('/api/public/v1/cate/categories');
 	const { meta, message } = res;
 	if (meta.status !== 200) uni.$showMessage();
 	cateList.value = message;
@@ -94,7 +96,7 @@ onShow(() => {
 					display: block;
 					width: 3px;
 					height: 30px;
-					background: #c00000;
+					background: #f2ba4b;
 					position: absolute;
 					left: 0;
 					top: 50%;

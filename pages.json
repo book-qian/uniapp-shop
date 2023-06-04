@@ -44,12 +44,12 @@
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "永乾优购",
-		"navigationBarBackgroundColor": "#C00000",
+		"navigationBarTitleText": "钳子备忘录",
+		"navigationBarBackgroundColor": "#f2ba4b",
 		"backgroundColor": "#FFFFFF"
 	},
 	"tabBar": {
-		"selectedColor": "#C00000",
+		"selectedColor": "#f2ba4b",
 		"list": [{
 				"pagePath": "pages/home/home",
 				"text": "首页",
@@ -64,9 +64,9 @@
 			},
 			{
 				"pagePath": "pages/cart/cart",
-				"text": "购物车",
-				"iconPath": "static/tab_icons/cart.png",
-				"selectedIconPath": "static/tab_icons/cart-active.png"
+				"text": "备忘录",
+				"iconPath": "static/tab_icons/memorandum.png",
+				"selectedIconPath": "static/tab_icons/memorandum-active.png"
 			},
 			{
 				"pagePath": "pages/my/my",

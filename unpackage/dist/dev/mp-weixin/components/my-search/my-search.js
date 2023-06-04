@@ -13,7 +13,7 @@ const _sfc_main = {
   props: {
     bgcolor: {
       type: String,
-      default: "#C00000"
+      default: "#f2ba4b"
     },
     radius: {
       type: Number,

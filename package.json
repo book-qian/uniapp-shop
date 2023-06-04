@@ -1,15 +1,42 @@
 {
-  "name": "uni-shop",
-  "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@escook/request-miniprogram": "^0.2.1"
-  }
+	"uni-app": {
+		"scripts": {
+			"dev": {
+				"title": "微信小程序——开发版",
+				"env": {
+					"ENV_TYPE": "dev",
+					"UNI_PLATFORM": "mp-weixin",
+					"VUE_APP_BASE_URL": "http://127.0.0.1:8090",
+					"VUE_APP_BASE_API": "https://api-hmugo-web.itheima.net"
+				}
+			},
+			"test": {
+				"title": "微信小程序——测试版",
+				"env": {
+					"ENV_TYPE": "test",
+					"UNI_PLATFORM": "mp-weixin",
+					"VUE_APP_BASE_URL": "https://api-hmugo-web.itheima.net"
+				}
+			},
+			"pro": {
+				"title": "微信小程序——正式版",
+				"env": {
+					"ENV_TYPE": "pro",
+					"UNI_PLATFORM": "mp-weixin",
+					"VUE_APP_BASE_URL": "http://pro.domain"
+				}
+			}
+		}
+	},
+	"description": "",
+	"main": "main.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@escook/request-miniprogram": "^0.2.1"
+	}
 }

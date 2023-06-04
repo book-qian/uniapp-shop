@@ -21,7 +21,7 @@
   display: block;
   width: 3px;
   height: 30px;
-  background: #c00000;
+  background: #f2ba4b;
   position: absolute;
   left: 0;
   top: 50%;

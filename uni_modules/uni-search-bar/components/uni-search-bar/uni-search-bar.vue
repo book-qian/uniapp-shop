@@ -236,7 +236,7 @@ $uni-searchbar-height: 36px;
 	position: relative;
 	padding: 10px;
 	// background-color: #fff;
-	background-color: #c00000;
+	background-color: #f2ba4b;
 }
 
 .uni-searchbar__box {

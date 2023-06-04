@@ -13,22 +13,70 @@ swiper image {
   justify-content: space-around;
   margin: 15rpx 0;
 }
-.nav-list .nav-img {
+.nav-list .nav-item {
   width: 128rpx;
   height: 140rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
-.floor-list .floor-img {
+.nav-list .nav-item .nav-img {
   width: 100%;
-  height: 60rpx;
 }
-.floor-list .right-img-box {
+.floor-list {
+  padding: 10px;
+}
+.floor-list .floor-item {
+  margin-bottom: 10px;
+}
+.floor-list .floor-item .cover-bg {
+  position: relative;
+  border-radius: 10rpx;
+}
+.floor-list .floor-item .cover-bg .cover-text {
+  width: 100%;
+  position: absolute;
+  color: #fff;
+  font-size: 20px;
+  top: 50%;
+  text-align: center;
+  font-weight: bold;
+  transform: translateY(-50%);
+}
+.floor-list .floor-item .floor-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.floor-list .floor-item .floor-title .floor-text {
+  margin-left: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.floor-list .floor-item .floor-title .floor-img {
+  width: 40rpx;
+  height: 40rpx;
+}
+.floor-list .floor-item .floor-img-box {
+  display: flex;
+}
+.floor-list .floor-item .floor-img-box .left-img-box {
+  font-size: 0;
+}
+.floor-list .floor-item .floor-img-box .right-img-box {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
-.floor-list .floor-img-box {
+.floor-list .floor-item .floor-img-box .right-img-box .right-item {
   display: flex;
-  padding-left: 10rpx;
+  align-items: center;
+  justify-content: center;
+}
+.floor-list .floor-item .floor-img-box .right-img-box .right-item .cover-bg .cover-text {
+  font-size: 20rpx;
+  color: #000;
 }
 .search-box {
   position: -webkit-sticky;

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const common_vendor = require("./common/vendor.js");
 const store_store = require("./store/store.js");
+require("./utils/axios.js");
 require("./store/cart.js");
 require("./store/user.js");
 if (!Math) {
@@ -25,25 +26,6 @@ const _sfc_main = {
   }
 };
 const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "/Users/yangyongqian/code/uni-shop/App.vue"]]);
-common_vendor.index.$http = common_vendor.$http;
-common_vendor.$http.baseUrl = "https://api-hmugo-web.itheima.net";
-common_vendor.$http.beforeRequest = function(options) {
-  common_vendor.index.showLoading({
-    title: "数据加载中..."
-  });
-  const {
-    url,
-    header
-  } = options;
-  if (url.includes("/my/")) {
-    options.header = {
-      Authorization: store_store.store.state.m_user.token
-    };
-  }
-};
-common_vendor.$http.afterRequest = function() {
-  common_vendor.index.hideLoading();
-};
 common_vendor.index.$showMessage = function(title = "网络请求失败", duration = 1500) {
   common_vendor.index.showToast({
     title,
@@ -51,6 +33,9 @@ common_vendor.index.$showMessage = function(title = "网络请求失败", durati
     icon: "none"
   });
 };
+console.log("http://127.0.0.1:8090", "获取处于当前开发环境的url");
+console.log("https://api-hmugo-web.itheima.net", "获取处于当前开发环境的api");
+console.log("dev", "获取当前处于哪个开发环境");
 function createApp() {
   const app = common_vendor.createSSRApp(App);
   app.use(store_store.store);
