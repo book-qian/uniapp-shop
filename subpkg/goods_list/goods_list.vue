@@ -7,6 +7,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { onLoad, onReachBottom, onPullDownRefresh } from '@dcloudio/uni-app';
+import { ajaxGet } from '@/utils/api.js';
 
 const queryObj = reactive({
 	query: '',
@@ -19,7 +20,7 @@ const total = ref(0);
 const goodsList = ref([]);
 const getGoodsList = async cb => {
 	isload.value = true;
-	const { data: res } = await uni.$http.get('/api/public/v1/goods/search', queryObj);
+	const { data: res } = await ajaxGet('/api/public/v1/goods/search', queryObj);
 	isload.value = false;
 
 	// 下拉刷新请求数据之后 关闭下拉效果

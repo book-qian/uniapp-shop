@@ -1,11 +1,9 @@
 <template>
 	<view class="cart-container" v-if="cart.length > 0">
-		<!-- 收货地址组件 -->
-		<my-address></my-address>
 		<!-- 商品列表标题区域 -->
 		<view class="cart-title">
-			<uni-icons type="shop" size="18"></uni-icons>
-			<text class="cart-title-text">购物车</text>
+			<uni-icons type="wallet" size="18"></uni-icons>
+			<text class="cart-title-text">备忘录</text>
 		</view>
 		<!-- 商品列表内容区域 -->
 		<uni-swipe-action>
@@ -20,7 +18,7 @@
 	</view>
 	<!--空白购物车区域 -->
 	<view class="empty-cart" v-else>
-		<uni-icons type="cart" size="40" color="#c00000"></uni-icons>
+		<uni-icons type="cart" size="40" color="#f2ba4b"></uni-icons>
 		<text class="tips-text">空空如也~</text>
 	</view>
 </template>

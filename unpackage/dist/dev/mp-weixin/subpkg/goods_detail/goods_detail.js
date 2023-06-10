@@ -1,5 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const utils_api = require("../../utils/api.js");
+require("../../utils/axios.js");
 if (!Array) {
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
   const _easycom_uni_goods_nav2 = common_vendor.resolveComponent("uni-goods-nav");
@@ -18,23 +20,23 @@ const _sfc_main = {
       goodsInfo: {},
       options: [
         {
-          icon: "shop",
-          text: "店铺"
+          icon: "fire",
+          text: "热度"
         },
         {
-          icon: "cart",
-          text: "购物车",
+          icon: "wallet",
+          text: "备忘录",
           info: 0
         }
       ],
       buttonGroup: [
         {
-          text: "加入购物车",
+          text: "加入备忘录",
           backgroundColor: "#ff0000",
           color: "#fff"
         },
         {
-          text: "立即购买",
+          text: "作为模板",
           backgroundColor: "#ffa200",
           color: "#fff"
         }
@@ -52,14 +54,14 @@ const _sfc_main = {
       { immediate: true }
     );
     const onClick = (e) => {
-      if (e.content.text === "购物车") {
+      if (e.content.text === "备忘录") {
         common_vendor.index.switchTab({
           url: "/pages/cart/cart"
         });
       }
     };
     const buttonClick = (e) => {
-      if (e.content.text === "加入购物车") {
+      if (e.content.text === "加入备忘录") {
         const { goods_id, goods_name, goods_price, goods_small_logo } = goodsDetail.goodsInfo;
         let goods = {
           goods_id,
@@ -72,46 +74,64 @@ const _sfc_main = {
         store.commit("m_cart/addToCart", goods);
       }
     };
+    const memorandum_detail = common_vendor.ref([]);
     const getGoodsInfo = async (goods_id) => {
-      const { data: res } = await common_vendor.index.$http.get("/api/public/v1/goods/detail", { goods_id });
+      const { data: res } = await utils_api.ajaxGet("/api/public/v1/goods/detail", { goods_id });
       const { meta, message } = res;
       if (meta.status !== 200)
         return common_vendor.index.$showMessage();
-      message.goods_introduce = message.goods_introduce.replace(/<img /g, '<img style="display:block;" ').replace(/webp,'jpg'/g);
+      memorandum_detail.value = message.memorandum_detail;
       goodsDetail.goodsInfo = message;
     };
     common_vendor.onLoad(({ goods_id }) => {
       getGoodsInfo(goods_id);
     });
+    const BASE_URL = common_vendor.ref("http://127.0.0.1:8090");
     const preview = (i) => {
+      let urls = goodsDetail.goodsInfo.pics.map((t) => {
+        return {
+          pics_big: `${BASE_URL.value}${t.pics_big}`
+        };
+      }).map((t) => t.pics_big);
       common_vendor.index.previewImage({
-        urls: goodsDetail.goodsInfo.pics.map((t) => t.pics_big),
+        urls,
         current: i
       });
     };
     return (_ctx, _cache) => {
-      var _a, _b, _c, _d, _e, _f;
+      var _a, _b, _c, _d, _e;
       return common_vendor.e({
         a: (_a = goodsDetail.goodsInfo) == null ? void 0 : _a.goods_name
       }, ((_b = goodsDetail.goodsInfo) == null ? void 0 : _b.goods_name) ? {
         b: common_vendor.f((_c = goodsDetail.goodsInfo) == null ? void 0 : _c.pics, (item, i, i0) => {
           return {
-            a: item.pics_big,
+            a: `${BASE_URL.value}${item.pics_big}`,
             b: i,
             c: common_vendor.o(($event) => preview(i), i)
           };
         }),
-        c: common_vendor.t((_d = goodsDetail.goodsInfo) == null ? void 0 : _d.goods_price),
-        d: common_vendor.t((_e = goodsDetail.goodsInfo) == null ? void 0 : _e.goods_name),
-        e: common_vendor.p({
+        c: common_vendor.p({
+          type: "fire",
+          size: "17",
+          color: "#f2ba4b"
+        }),
+        d: common_vendor.t((_d = goodsDetail.goodsInfo) == null ? void 0 : _d.goods_number),
+        e: common_vendor.t((_e = goodsDetail.goodsInfo) == null ? void 0 : _e.goods_name),
+        f: common_vendor.p({
           type: "star",
           size: "18",
           color: "gray"
         }),
-        f: (_f = goodsDetail.goodsInfo) == null ? void 0 : _f.goods_introduce,
-        g: common_vendor.o(onClick),
-        h: common_vendor.o(buttonClick),
-        i: common_vendor.p({
+        g: common_vendor.f(memorandum_detail.value, (item, index, i0) => {
+          return {
+            a: common_vendor.t(item.name),
+            b: `${BASE_URL.value}${item.url}`,
+            c: index
+          };
+        }),
+        h: common_vendor.o(onClick),
+        i: common_vendor.o(buttonClick),
+        j: common_vendor.p({
           fill: true,
           options: goodsDetail.options,
           buttonGroup: goodsDetail.buttonGroup

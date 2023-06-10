@@ -1,13 +1,16 @@
 <template>
 	<view class="goods-item">
 		<view class="good-item-left">
-			<radio :checked="goods.goods_state" color="#C00000" v-if="showRadio" @click="radioClickHandler"></radio>
-			<image class="goods-pic" :src="goods.goods_small_logo || defaultPic"></image>
+			<radio :checked="goods.goods_state" color="#f2ba4b" v-if="showRadio" @click="radioClickHandler"></radio>
+			<image class="goods-pic" :src="`${BASE_URL}${goods.goods_small_logo}` || defaultPic"></image>
 		</view>
 		<view class="goods-item-right">
 			<view class="goods-name">{{ goods.goods_name }}</view>
 			<view class="goods-info">
-				<view class="goods-price">¥{{ goodsPrice }}</view>
+				<view class="goods-price">
+					<uni-icons type="fire" size="17" color="#f2ba4b"></uni-icons>
+					{{ goodsPrice }}
+				</view>
 				<uni-number-box :min="1" v-model="goods.goods_count" v-if="showNum" @change="numChangeHandler"></uni-number-box>
 			</view>
 		</view>
@@ -16,6 +19,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+const BASE_URL = ref(process.env.VUE_APP_BASE_URL);
 
 const props = defineProps({
 	// 商品信息对象
@@ -40,7 +44,7 @@ const props = defineProps({
 const emits = defineEmits(['radio-change', 'num-change']);
 
 const goodsPrice = computed(() => {
-	return props.goods && Number(props.goods.goods_price).toFixed(2);
+	return props.goods && Number(props.goods.goods_price);
 });
 const defaultPic = ref('https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg');
 
@@ -89,7 +93,7 @@ const numChangeHandler = val => {
 			justify-content: space-between;
 			.goods-price {
 				font-size: 16px;
-				color: #c00000;
+				color: #f2ba4b;
 			}
 		}
 	}

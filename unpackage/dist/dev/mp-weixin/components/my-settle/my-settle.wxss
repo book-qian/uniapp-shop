@@ -18,12 +18,12 @@
   align-items: center;
 }
 .my-settle-container .amount-box .amount {
-  color: #c00000;
+  color: #f2ba4b;
   font-weight: bold;
 }
 .my-settle-container .btn-settle {
   height: 50px;
-  background: #c00000;
+  background: #f2ba4b;
   color: #fff;
   line-height: 50px;
   padding: 0 10px;

@@ -32,5 +32,5 @@
 }
 .goods-item .goods-item-right .goods-info .goods-price {
   font-size: 16px;
-  color: #c00000;
+  color: #f2ba4b;
 }

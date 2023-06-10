@@ -1,5 +1,15 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const utils_api = require("../../utils/api.js");
+require("../../utils/axios.js");
+if (!Array) {
+  const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
+  _easycom_uni_icons2();
+}
+const _easycom_uni_icons = () => "../../uni_modules/uni-icons/components/uni-icons/uni-icons.js";
+if (!Math) {
+  _easycom_uni_icons();
+}
 const _sfc_main = {
   __name: "my-settle",
   setup(__props) {
@@ -8,13 +18,10 @@ const _sfc_main = {
     const checkedCount = common_vendor.computed(() => store.getters["m_cart/checkedCount"]);
     const isFullChecked = common_vendor.computed(() => allCount.value === checkedCount.value);
     const changeState = () => store.commit("m_cart/updateAllGoodsState", !isFullChecked.value);
-    const addstr = common_vendor.computed(() => store.getters["m_user/addstr"]);
     const token = common_vendor.computed(() => store.state["m_user"].token);
     const settlement = () => {
       if (!checkedCount.value)
-        return common_vendor.index.$showMessage("请先勾选商品");
-      if (!addstr.value)
-        return common_vendor.index.$showMessage("请先选择地址");
+        return common_vendor.index.$showMessage("请先勾选备忘录");
       if (!token.value)
         return delayNavigation();
       payOrder();
@@ -43,7 +50,7 @@ const _sfc_main = {
     };
     const showTips = (n) => {
       common_vendor.index.showToast({
-        title: `请登录后再结算，${n}秒之后将跳转登录页面`,
+        title: `请登录后再入库，${n}秒之后将跳转登录页面`,
         icon: "none",
         mask: true,
         // 添加遮罩层，防止点击穿透
@@ -63,23 +70,24 @@ const _sfc_main = {
       const orderInfo = {
         // order_price: checkedGoodsAmount
         order_price: "0.01",
-        consignee_addr: addstr.value,
+        consignee_addr: "",
+        // consignee_addr: addstr.value,
         goods
       };
-      const { data } = await common_vendor.index.$http.post("/api/public/v1/my/orders/create", orderInfo);
+      const { data } = await utils_api.fetchPost("/api/public/v1/my/orders/create", orderInfo);
       const { meta, message } = data;
       if (meta.status !== 200)
-        return common_vendor.index.$showMessage("创建订单失败");
+        return common_vendor.index.$showMessage("操作失败");
       const orderNum = message.order_number;
-      const { data: prepayment } = await common_vendor.index.$http.post("/api/public/v1/my/orders/req_unifiedorder", orderNum);
+      const { data: prepayment } = await utils_api.fetchPost("/api/public/v1/my/orders/req_unifiedorder", orderNum);
       const { meta: prepaymentMeta, message: prepaymentMessage } = prepayment;
       if ((prepaymentMeta == null ? void 0 : prepaymentMeta.status) !== 200)
-        return common_vendor.index.$showMessage("创建订单失败");
+        return common_vendor.index.$showMessage("操作失败");
       const payInfo = prepaymentMessage.pay;
       common_vendor.index.requestPayment({
         ...payInfo,
         success: async (res) => {
-          const { data: res3 } = await common_vendor.index.$http.post("/api/public/v1/my/orders/chkOrder", { order_number: orderNum });
+          const { data: res3 } = await utils_api.fetchPost("/api/public/v1/my/orders/chkOrder", { order_number: orderNum });
           if (res3.meta.status !== 200)
             return common_vendor.index.$showMessage("订单未支付！");
           common_vendor.index.showToast({
@@ -96,9 +104,14 @@ const _sfc_main = {
       return {
         a: common_vendor.unref(isFullChecked),
         b: common_vendor.o(changeState),
-        c: common_vendor.t(common_vendor.unref(checkedGoodsAmount)),
-        d: common_vendor.t(common_vendor.unref(checkedCount)),
-        e: common_vendor.o(settlement)
+        c: common_vendor.p({
+          type: "fire",
+          size: "17",
+          color: "#f2ba4b"
+        }),
+        d: common_vendor.t(common_vendor.unref(checkedGoodsAmount)),
+        e: common_vendor.t(common_vendor.unref(checkedCount)),
+        f: common_vendor.o(settlement)
       };
     };
   }

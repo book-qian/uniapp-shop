@@ -6,7 +6,7 @@
 }
 .my-userinfo-container .top-box {
   height: 400rpx;
-  background-color: #c00000;
+  background-color: #f2ba4b;
   display: flex;
   flex-direction: column;
   align-items: center;

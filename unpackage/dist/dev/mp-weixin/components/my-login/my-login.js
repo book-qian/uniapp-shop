@@ -1,5 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const utils_api = require("../../utils/api.js");
+require("../../utils/axios.js");
 if (!Array) {
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
   _easycom_uni_icons2();
@@ -29,7 +31,7 @@ const _sfc_main = {
         rawData,
         signature
       };
-      const { data: loginResult } = await common_vendor.index.$http.post("/api/public/v1/users/wxlogin", query);
+      const { data: loginResult } = await utils_api.fetchPost("/api/public/v1/users/wxlogin", query);
       const { meta, message } = loginResult;
       if (meta.status == 200)
         return common_vendor.index.$showMessage("登录失败");

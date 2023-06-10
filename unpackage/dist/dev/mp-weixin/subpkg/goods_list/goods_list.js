@@ -1,5 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const utils_api = require("../../utils/api.js");
+require("../../utils/axios.js");
 if (!Array) {
   const _easycom_my_goods2 = common_vendor.resolveComponent("my-goods");
   _easycom_my_goods2();
@@ -22,7 +24,7 @@ const _sfc_main = {
     const goodsList = common_vendor.ref([]);
     const getGoodsList = async (cb) => {
       isload.value = true;
-      const { data: res } = await common_vendor.index.$http.get("/api/public/v1/goods/search", queryObj);
+      const { data: res } = await utils_api.ajaxGet("/api/public/v1/goods/search", queryObj);
       isload.value = false;
       cb && cb();
       const { meta, message } = res;

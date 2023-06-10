@@ -9,6 +9,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
+import { ajaxGet, fetchPost } from '@/utils/api.js';
 const TOKEN = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIzLCJpYXQiOjE1NjQ3MzAwNzksImV4cCI6MTAwMTU2NDczMDA3OH0.YPt-XeLnjV-_1ITaXGY2FhxmCe4NvXuRnRB8OMCfnPo';
 const store = useStore();
 const redirectInfo = computed(() => store.state['m_user'].redirectInfo);
@@ -29,7 +30,7 @@ const getToken = async ({ encryptedData, iv, rawData, signature }) => {
 		signature
 	};
 
-	const { data: loginResult } = await uni.$http.post('/api/public/v1/users/wxlogin', query);
+	const { data: loginResult } = await fetchPost('/api/public/v1/users/wxlogin', query);
 	const { meta, message } = loginResult;
 	if (meta.status == 200) return uni.$showMessage('登录失败');
 	uni.$showMessage('登录成功');
@@ -77,7 +78,7 @@ const getToken = async ({ encryptedData, iv, rawData, signature }) => {
 		width: 90%;
 		border-radius: 100px;
 		margin: 15px 0;
-		background-color: #c00000;
+		background-color: #f2ba4b;
 	}
 	.tips-text {
 		color: gray;

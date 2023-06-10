@@ -12,15 +12,15 @@
 				<view class="panel-body">
 					<view class="panel-item">
 						<text>8</text>
-						<text>收藏的店铺</text>
+						<text>备忘录热度</text>
 					</view>
 					<view class="panel-item">
 						<text>16</text>
-						<text>收藏的商品</text>
+						<text>收藏的备忘录</text>
 					</view>
 					<view class="panel-item">
 						<text>18</text>
-						<text>关注的商品</text>
+						<text>关注的备忘录</text>
 					</view>
 					<view class="panel-item">
 						<text>28</text>
@@ -30,30 +30,30 @@
 			</view>
 			<!-- 第二个面板区域 -->
 			<view class="panel">
-				<view class="panel-title">我的订单</view>
+				<view class="panel-title">我的备忘录</view>
 				<view class="panel-body">
 					<view class="panel-item">
 						<image src="/static/my-icons/icon1.png" class="ico"></image>
-						<text>待付款</text>
+						<text>已置顶</text>
 					</view>
 					<view class="panel-item">
 						<image src="/static/my-icons/icon2.png" class="ico"></image>
-						<text>待收货</text>
+						<text>未标记</text>
 					</view>
 					<view class="panel-item">
 						<image src="/static/my-icons/icon3.png" class="ico"></image>
-						<text>退款/退货</text>
+						<text>快捷备忘录</text>
 					</view>
 					<view class="panel-item">
 						<image src="/static/my-icons/icon4.png" class="ico"></image>
-						<text>全部订单</text>
+						<text>全部备忘录</text>
 					</view>
 				</view>
 			</view>
 			<!-- 第三个面板区域 -->
 			<view class="panel">
 				<view class="panel-list-item">
-					<text>收货地址</text>
+					<text>新建备忘录</text>
 					<uni-icons type="arrowright" size="15"></uni-icons>
 				</view>
 				<view class="panel-list-item">
@@ -97,7 +97,7 @@ const logout = async () => {
 	background-color: #f4f4f4;
 	.top-box {
 		height: 400rpx;
-		background-color: #c00000;
+		background-color: #f2ba4b;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

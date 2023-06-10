@@ -2,12 +2,15 @@
 	<view v-if="goodsDetail.goodsInfo?.goods_name" class="goods-detail-container">
 		<!-- 轮播图区域 -->
 		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" :circular="true">
-			<swiper-item v-for="(item, i) in goodsDetail.goodsInfo?.pics" :key="i" @click="preview(i)"><image :src="item.pics_big"></image></swiper-item>
+			<swiper-item v-for="(item, i) in goodsDetail.goodsInfo?.pics" :key="i" @click="preview(i)"><image :src="`${BASE_URL}${item.pics_big}`"></image></swiper-item>
 		</swiper>
 		<!-- 商品信息区域 -->
 		<view class="goods-info-box">
 			<!-- 商品价格 -->
-			<view class="goods-price">￥{{ goodsDetail.goodsInfo?.goods_price }}</view>
+			<view class="goods-price">
+				<uni-icons type="fire" size="17" color="#f2ba4b"></uni-icons>
+				{{ goodsDetail.goodsInfo?.goods_number }}
+			</view>
 			<!-- 商品信息主体区域 -->
 			<view class="goods-info-body">
 				<!-- 商品名称 -->
@@ -18,12 +21,13 @@
 					<text>收藏</text>
 				</view>
 			</view>
-			<!-- 运费 -->
-			<view class="yf">快递：免运费</view>
 		</view>
 		<!-- 商品介绍 -->
-		<rich-text :nodes="goodsDetail.goodsInfo?.goods_introduce"></rich-text>
-
+		<!-- <rich-text :nodes="goodsDetail.goodsInfo?.goods_introduce"></rich-text> -->
+		<view class="memorandum_detail" v-for="(item, index) in memorandum_detail" :key="index">
+			<text class="memorandum-text">{{ item.name }}</text>
+			<image :src="`${BASE_URL}${item.url}`"></image>
+		</view>
 		<!-- 商品导航区域 -->
 		<view class="goods-nav">
 			<uni-goods-nav :fill="true" :options="goodsDetail.options" :buttonGroup="goodsDetail.buttonGroup" @click="onClick" @buttonClick="buttonClick" />
@@ -35,28 +39,29 @@
 import { ref, computed, reactive, watch } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { useStore } from 'vuex';
+import { ajaxGet } from '@/utils/api.js';
 const store = useStore();
 const goodsDetail = reactive({
 	goodsInfo: {},
 	options: [
 		{
-			icon: 'shop',
-			text: '店铺'
+			icon: 'fire',
+			text: '热度'
 		},
 		{
-			icon: 'cart',
-			text: '购物车',
+			icon: 'wallet',
+			text: '备忘录',
 			info: 0
 		}
 	],
 	buttonGroup: [
 		{
-			text: '加入购物车',
+			text: '加入备忘录',
 			backgroundColor: '#ff0000',
 			color: '#fff'
 		},
 		{
-			text: '立即购买',
+			text: '作为模板',
 			backgroundColor: '#ffa200',
 			color: '#fff'
 		}
@@ -76,7 +81,7 @@ watch(
 );
 // 左侧导航点击
 const onClick = e => {
-	if (e.content.text === '购物车') {
+	if (e.content.text === '备忘录') {
 		uni.switchTab({
 			url: '/pages/cart/cart'
 		});
@@ -85,7 +90,7 @@ const onClick = e => {
 
 // 右侧点击
 const buttonClick = e => {
-	if (e.content.text === '加入购物车') {
+	if (e.content.text === '加入备忘录') {
 		// 组织商品对象 goods_id goods_name goods_price goods_count goods_small_logo goods_state
 		const { goods_id, goods_name, goods_price, goods_small_logo } = goodsDetail.goodsInfo;
 		let goods = {
@@ -101,12 +106,13 @@ const buttonClick = e => {
 	}
 };
 
-// 右侧导航点击
+// 获取备忘录详情
+const memorandum_detail = ref([]);
 const getGoodsInfo = async goods_id => {
-	const { data: res } = await uni.$http.get('/api/public/v1/goods/detail', { goods_id });
+	const { data: res } = await ajaxGet('/api/public/v1/goods/detail', { goods_id });
 	const { meta, message } = res;
 	if (meta.status !== 200) return uni.$showMessage();
-	message.goods_introduce = message.goods_introduce.replace(/<img /g, '<img style="display:block;" ').replace(/webp,'jpg'/g);
+	memorandum_detail.value = message.memorandum_detail;
 
 	goodsDetail.goodsInfo = message;
 };
@@ -115,9 +121,18 @@ onLoad(({ goods_id }) => {
 	getGoodsInfo(goods_id);
 });
 
+const BASE_URL = ref(process.env.VUE_APP_BASE_URL);
 const preview = i => {
+	let urls = goodsDetail.goodsInfo.pics
+		.map(t => {
+			return {
+				pics_big: `${BASE_URL.value}${t.pics_big}`
+			};
+		})
+		.map(t => t.pics_big);
+
 	uni.previewImage({
-		urls: goodsDetail.goodsInfo.pics.map(t => t.pics_big),
+		urls,
 		current: i
 	});
 };
@@ -135,7 +150,7 @@ swiper {
 	padding: 10px;
 	padding-right: 0;
 	.goods-price {
-		color: #c00000;
+		color: #f2ba4b;
 		font-size: 18px;
 		margin: 10px 0;
 	}
@@ -171,5 +186,16 @@ swiper {
 }
 .goods-detail-container {
 	padding-bottom: 50px;
+}
+.memorandum_detail {
+	padding: 10px;
+	.memorandum-text {
+		text-align: left;
+		font-size: 17px;
+	}
+
+	image {
+		margin-top: 60rpx;
+	}
 }
 </style>

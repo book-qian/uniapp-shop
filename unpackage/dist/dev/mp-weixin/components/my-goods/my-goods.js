@@ -1,12 +1,14 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 if (!Array) {
+  const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
   const _easycom_uni_number_box2 = common_vendor.resolveComponent("uni-number-box");
-  _easycom_uni_number_box2();
+  (_easycom_uni_icons2 + _easycom_uni_number_box2)();
 }
+const _easycom_uni_icons = () => "../../uni_modules/uni-icons/components/uni-icons/uni-icons.js";
 const _easycom_uni_number_box = () => "../../uni_modules/uni-number-box/components/uni-number-box/uni-number-box.js";
 if (!Math) {
-  _easycom_uni_number_box();
+  (_easycom_uni_icons + _easycom_uni_number_box)();
 }
 const _sfc_main = {
   __name: "my-goods",
@@ -32,8 +34,9 @@ const _sfc_main = {
   emits: ["radio-change", "num-change"],
   setup(__props, { emit: emits }) {
     const props = __props;
+    const BASE_URL = common_vendor.ref("http://127.0.0.1:8090");
     const goodsPrice = common_vendor.computed(() => {
-      return props.goods && Number(props.goods.goods_price).toFixed(2);
+      return props.goods && Number(props.goods.goods_price);
     });
     const defaultPic = common_vendor.ref("https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg");
     const radioClickHandler = (e) => {
@@ -55,14 +58,19 @@ const _sfc_main = {
         b: __props.goods.goods_state,
         c: common_vendor.o(radioClickHandler)
       } : {}, {
-        d: __props.goods.goods_small_logo || defaultPic.value,
+        d: `${BASE_URL.value}${__props.goods.goods_small_logo}` || defaultPic.value,
         e: common_vendor.t(__props.goods.goods_name),
-        f: common_vendor.t(common_vendor.unref(goodsPrice)),
-        g: __props.showNum
+        f: common_vendor.p({
+          type: "fire",
+          size: "17",
+          color: "#f2ba4b"
+        }),
+        g: common_vendor.t(common_vendor.unref(goodsPrice)),
+        h: __props.showNum
       }, __props.showNum ? {
-        h: common_vendor.o(numChangeHandler),
-        i: common_vendor.o(($event) => __props.goods.goods_count = $event),
-        j: common_vendor.p({
+        i: common_vendor.o(numChangeHandler),
+        j: common_vendor.o(($event) => __props.goods.goods_count = $event),
+        k: common_vendor.p({
           min: 1,
           modelValue: __props.goods.goods_count
         })

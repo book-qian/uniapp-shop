@@ -3,9 +3,9 @@ import request from '@/utils/axios.js'
 const BASE_URL = process.env.VUE_APP_BASE_URL // node接口地址
 
 // node接口get请求封装
-export function ajaxGet(url) {
+export function ajaxGet(url, params) {
 	return new Promise(async (resolve, reject) => {
-		const res = await request.get(BASE_URL + url)
+		const res = await request.get(BASE_URL + url, params)
 		resolve(res)
 	})
 }
@@ -30,9 +30,9 @@ export function fetchPost(url, params) {
 	})
 }
 // java get请求封装
-export function fetchGet(url) {
+export function fetchGet(url, params) {
 	return new Promise(async (resolve, reject) => {
-		const res = await request.get(BASE_API + url)
+		const res = await request.get(BASE_API + url, params)
 		resolve(res)
 	})
 }

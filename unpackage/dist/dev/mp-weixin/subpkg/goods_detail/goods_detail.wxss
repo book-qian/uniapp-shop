@@ -12,7 +12,7 @@ swiper image {
   padding-right: 0;
 }
 .goods-info-box .goods-price {
-  color: #c00000;
+  color: #f2ba4b;
   font-size: 18px;
   margin: 10px 0;
 }
@@ -47,4 +47,14 @@ swiper image {
 }
 .goods-detail-container {
   padding-bottom: 50px;
+}
+.memorandum_detail {
+  padding: 10px;
+}
+.memorandum_detail .memorandum-text {
+  text-align: left;
+  font-size: 17px;
+}
+.memorandum_detail image {
+  margin-top: 60rpx;
 }

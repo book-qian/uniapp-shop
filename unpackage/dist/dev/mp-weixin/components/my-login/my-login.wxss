@@ -26,7 +26,7 @@
   width: 90%;
   border-radius: 100px;
   margin: 15px 0;
-  background-color: #c00000;
+  background-color: #f2ba4b;
 }
 .login-container .tips-text {
   color: gray;
