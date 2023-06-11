@@ -33,9 +33,9 @@ common_vendor.index.$showMessage = function(title = "网络请求失败", durati
     icon: "none"
   });
 };
-console.log("http://127.0.0.1:8090", "获取处于当前开发环境的url");
+console.log("https://www.fxgh.top/memorandumServer", "获取处于当前开发环境的url");
 console.log("https://api-hmugo-web.itheima.net", "获取处于当前开发环境的api");
-console.log("dev", "获取当前处于哪个开发环境");
+console.log("pro", "获取当前处于哪个开发环境");
 function createApp() {
   const app = common_vendor.createSSRApp(App);
   app.use(store_store.store);

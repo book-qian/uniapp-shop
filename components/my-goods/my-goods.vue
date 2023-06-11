@@ -19,7 +19,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-const BASE_URL = ref(process.env.VUE_APP_BASE_URL);
+import { BASE_URL } from '@/utils/config.js';
 
 const props = defineProps({
 	// 商品信息对象

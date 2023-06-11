@@ -40,6 +40,7 @@ import { ref, computed, reactive, watch } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { useStore } from 'vuex';
 import { ajaxGet } from '@/utils/api.js';
+import { BASE_URL } from '@/utils/config.js';
 const store = useStore();
 const goodsDetail = reactive({
 	goodsInfo: {},
@@ -121,12 +122,11 @@ onLoad(({ goods_id }) => {
 	getGoodsInfo(goods_id);
 });
 
-const BASE_URL = ref(process.env.VUE_APP_BASE_URL);
 const preview = i => {
 	let urls = goodsDetail.goodsInfo.pics
 		.map(t => {
 			return {
-				pics_big: `${BASE_URL.value}${t.pics_big}`
+				pics_big: `${BASE_URL}${t.pics_big}`
 			};
 		})
 		.map(t => t.pics_big);

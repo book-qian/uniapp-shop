@@ -31,8 +31,8 @@ import { ref } from 'vue';
 import { onLoad, onShow } from '@dcloudio/uni-app';
 import { setBarge } from '@/hook/useTabbarBadge.js';
 import { ajaxGet, fetchGet } from '@/utils/api.js';
+import { BASE_URL } from '@/utils/config.js';
 
-const BASE_URL = ref(process.env.VUE_APP_BASE_URL);
 const cateList = ref([]);
 const cateLevel2 = ref([]);
 

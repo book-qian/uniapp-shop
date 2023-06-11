@@ -57,11 +57,11 @@ import { ref } from 'vue';
 import { onLoad, onShow } from '@dcloudio/uni-app';
 import { setBarge } from '@/hook/useTabbarBadge.js';
 import { ajaxGet } from '@/utils/api.js';
+import { BASE_URL } from '@/utils/config.js';
 
 const swiperList = ref([]);
 const navList = ref([]);
 const floorList = ref([]);
-const BASE_URL = ref(process.env.VUE_APP_BASE_URL);
 
 const getSwiperData = async () => {
 	const { data: res } = await ajaxGet('/api/public/v1/home/swiperdata');

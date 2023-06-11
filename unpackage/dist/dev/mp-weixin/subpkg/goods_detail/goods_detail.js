@@ -1,6 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const utils_api = require("../../utils/api.js");
+const utils_config = require("../../utils/config.js");
 require("../../utils/axios.js");
 if (!Array) {
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
@@ -86,11 +87,10 @@ const _sfc_main = {
     common_vendor.onLoad(({ goods_id }) => {
       getGoodsInfo(goods_id);
     });
-    const BASE_URL = common_vendor.ref("http://127.0.0.1:8090");
     const preview = (i) => {
       let urls = goodsDetail.goodsInfo.pics.map((t) => {
         return {
-          pics_big: `${BASE_URL.value}${t.pics_big}`
+          pics_big: `${utils_config.BASE_URL}${t.pics_big}`
         };
       }).map((t) => t.pics_big);
       common_vendor.index.previewImage({
@@ -105,7 +105,7 @@ const _sfc_main = {
       }, ((_b = goodsDetail.goodsInfo) == null ? void 0 : _b.goods_name) ? {
         b: common_vendor.f((_c = goodsDetail.goodsInfo) == null ? void 0 : _c.pics, (item, i, i0) => {
           return {
-            a: `${BASE_URL.value}${item.pics_big}`,
+            a: `${common_vendor.unref(utils_config.BASE_URL)}${item.pics_big}`,
             b: i,
             c: common_vendor.o(($event) => preview(i), i)
           };
@@ -125,7 +125,7 @@ const _sfc_main = {
         g: common_vendor.f(memorandum_detail.value, (item, index, i0) => {
           return {
             a: common_vendor.t(item.name),
-            b: `${BASE_URL.value}${item.url}`,
+            b: `${common_vendor.unref(utils_config.BASE_URL)}${item.url}`,
             c: index
           };
         }),

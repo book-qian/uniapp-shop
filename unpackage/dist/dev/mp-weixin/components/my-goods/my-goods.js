@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const utils_config = require("../../utils/config.js");
 if (!Array) {
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
   const _easycom_uni_number_box2 = common_vendor.resolveComponent("uni-number-box");
@@ -34,7 +35,6 @@ const _sfc_main = {
   emits: ["radio-change", "num-change"],
   setup(__props, { emit: emits }) {
     const props = __props;
-    const BASE_URL = common_vendor.ref("http://127.0.0.1:8090");
     const goodsPrice = common_vendor.computed(() => {
       return props.goods && Number(props.goods.goods_price);
     });
@@ -58,7 +58,7 @@ const _sfc_main = {
         b: __props.goods.goods_state,
         c: common_vendor.o(radioClickHandler)
       } : {}, {
-        d: `${BASE_URL.value}${__props.goods.goods_small_logo}` || defaultPic.value,
+        d: `${common_vendor.unref(utils_config.BASE_URL)}${__props.goods.goods_small_logo}` || defaultPic.value,
         e: common_vendor.t(__props.goods.goods_name),
         f: common_vendor.p({
           type: "fire",

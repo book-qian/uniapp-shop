@@ -2,6 +2,7 @@
 const common_vendor = require("../../common/vendor.js");
 const hook_useTabbarBadge = require("../../hook/useTabbarBadge.js");
 const utils_api = require("../../utils/api.js");
+const utils_config = require("../../utils/config.js");
 require("../../utils/axios.js");
 if (!Array) {
   const _easycom_my_search2 = common_vendor.resolveComponent("my-search");
@@ -17,7 +18,6 @@ const _sfc_main = {
     const swiperList = common_vendor.ref([]);
     const navList = common_vendor.ref([]);
     const floorList = common_vendor.ref([]);
-    const BASE_URL = common_vendor.ref("http://127.0.0.1:8090");
     const getSwiperData = async () => {
       const { data: res } = await utils_api.ajaxGet("/api/public/v1/home/swiperdata");
       const { meta, message } = res;
@@ -70,14 +70,14 @@ const _sfc_main = {
         a: common_vendor.o(gotoSearch),
         b: common_vendor.f(swiperList.value, (item, i, i0) => {
           return {
-            a: `${BASE_URL.value}${item.image_src}`,
+            a: `${common_vendor.unref(utils_config.BASE_URL)}${item.image_src}`,
             b: `/subpkg/goods_detail/goods_detail?goods_id=${item.goods_id}`,
             c: i
           };
         }),
         c: common_vendor.f(navList.value, (item, i, i0) => {
           return {
-            a: `${BASE_URL.value}${item.image_src}`,
+            a: `${common_vendor.unref(utils_config.BASE_URL)}${item.image_src}`,
             b: common_vendor.t(item.name),
             c: i,
             d: common_vendor.o(($event) => navClickHander(item), i)
@@ -85,19 +85,19 @@ const _sfc_main = {
         }),
         d: common_vendor.f(floorList.value, (item, i, i0) => {
           return {
-            a: `${BASE_URL.value}${item.floor_title.image_src}`,
+            a: `${common_vendor.unref(utils_config.BASE_URL)}${item.floor_title.image_src}`,
             b: common_vendor.t(item.floor_title.name),
             c: common_vendor.t(item.product_list[0].name),
-            d: `${BASE_URL.value}${item.product_list[0].image_src}`,
+            d: `${common_vendor.unref(utils_config.BASE_URL)}${item.product_list[0].image_src}`,
             e: item.product_list[0].image_width + "rpx",
-            f: `${BASE_URL.value}${item.product_list[0].url}`,
+            f: `${common_vendor.unref(utils_config.BASE_URL)}${item.product_list[0].url}`,
             g: common_vendor.f(item.product_list, (item2, index, i1) => {
               return common_vendor.e({
                 a: index !== 0
               }, index !== 0 ? {
                 b: common_vendor.t(item2.name),
                 c: item2.image_width + "rpx",
-                d: `${BASE_URL.value}${item2.image_src}`,
+                d: `${common_vendor.unref(utils_config.BASE_URL)}${item2.image_src}`,
                 e: item2.url
               } : {}, {
                 f: index

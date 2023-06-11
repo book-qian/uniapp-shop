@@ -1,7 +1,7 @@
 "use strict";
 require("./axios.js");
 const common_vendor = require("../common/vendor.js");
-const BASE_URL = "http://127.0.0.1:8090";
+const BASE_URL = "https://www.fxgh.top/memorandumServer";
 function ajaxGet(url, params) {
   return new Promise(async (resolve, reject) => {
     const res = await common_vendor.$http.get(BASE_URL + url, params);

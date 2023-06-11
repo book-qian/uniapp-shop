@@ -1,0 +1,1 @@
+{"version":3,"file":"config.js","sources":["../../../../../utils/config.js"],"sourcesContent":["// 图片资源地址\r\nexport const BASE_URL = process.env.VUE_APP_BASE_IMG;"],"names":[],"mappings":";AACY,MAAC,WAAW;;"}

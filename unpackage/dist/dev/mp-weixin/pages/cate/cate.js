@@ -2,6 +2,7 @@
 const common_vendor = require("../../common/vendor.js");
 const hook_useTabbarBadge = require("../../hook/useTabbarBadge.js");
 const utils_api = require("../../utils/api.js");
+const utils_config = require("../../utils/config.js");
 require("../../utils/axios.js");
 if (!Array) {
   const _easycom_my_search2 = common_vendor.resolveComponent("my-search");
@@ -14,7 +15,6 @@ if (!Math) {
 const _sfc_main = {
   __name: "cate",
   setup(__props) {
-    const BASE_URL = common_vendor.ref("http://127.0.0.1:8090");
     const cateList = common_vendor.ref([]);
     const cateLevel2 = common_vendor.ref([]);
     const getCateListData = async () => {
@@ -68,7 +68,7 @@ const _sfc_main = {
             a: common_vendor.t(item2.cat_name),
             b: common_vendor.f(item2.children, (item3, i3, i1) => {
               return {
-                a: item3.cat_icon.includes("api-hmugo-web.itheima.net") ? item3.cat_icon : `${BASE_URL.value}${item3.cat_icon}`,
+                a: item3.cat_icon.includes("api-hmugo-web.itheima.net") ? item3.cat_icon : `${common_vendor.unref(utils_config.BASE_URL)}${item3.cat_icon}`,
                 b: common_vendor.t(item3.cat_name),
                 c: i3,
                 d: common_vendor.o(($event) => gotoGoodsList(item3), i3)

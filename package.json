@@ -6,8 +6,9 @@
 				"env": {
 					"ENV_TYPE": "dev",
 					"UNI_PLATFORM": "mp-weixin",
+					"VUE_APP_BASE_API": "https://api-hmugo-web.itheima.net",
 					"VUE_APP_BASE_URL": "http://127.0.0.1:8090/memorandumServer",
-					"VUE_APP_BASE_API": "https://api-hmugo-web.itheima.net"
+					"VUE_APP_BASE_IMG": "https://www.fxgh.top"
 				}
 			},
 			"test": {
@@ -15,7 +16,8 @@
 				"env": {
 					"ENV_TYPE": "test",
 					"UNI_PLATFORM": "mp-weixin",
-					"VUE_APP_BASE_URL": "https://api-hmugo-web.itheima.net"
+					"VUE_APP_BASE_API": "https://api-hmugo-web.itheima.net",
+					"VUE_APP_BASE_URL": "http://127.0.0.1:8090/memorandumServer"
 				}
 			},
 			"pro": {
@@ -23,7 +25,9 @@
 				"env": {
 					"ENV_TYPE": "pro",
 					"UNI_PLATFORM": "mp-weixin",
-					"VUE_APP_BASE_URL": "https://www.fxgh.top/memorandumServer"
+					"VUE_APP_BASE_API": "https://api-hmugo-web.itheima.net",
+					"VUE_APP_BASE_URL": "https://www.fxgh.top/memorandumServer",
+					"VUE_APP_BASE_IMG": "https://www.fxgh.top"
 				}
 			}
 		}
