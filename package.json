@@ -6,7 +6,7 @@
 				"env": {
 					"ENV_TYPE": "dev",
 					"UNI_PLATFORM": "mp-weixin",
-					"VUE_APP_BASE_URL": "http://127.0.0.1:8090",
+					"VUE_APP_BASE_URL": "http://127.0.0.1:8090/memorandumServer",
 					"VUE_APP_BASE_API": "https://api-hmugo-web.itheima.net"
 				}
 			},
@@ -23,7 +23,7 @@
 				"env": {
 					"ENV_TYPE": "pro",
 					"UNI_PLATFORM": "mp-weixin",
-					"VUE_APP_BASE_URL": "http://pro.domain"
+					"VUE_APP_BASE_URL": "https://www.fxgh.top/memorandumServer"
 				}
 			}
 		}
